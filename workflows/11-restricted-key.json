@@ -1,0 +1,54 @@
+{
+  "name": "SSH Playground - 11 - Restricted Key",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "9f30f8cd-d860-5b2a-9dd1-f86049a976a0",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "touch /tmp/lccs-playground-11-should-not-exist",
+        "cwd": "/home/automation"
+      },
+      "id": "0b9d4e4d-c3df-5a59-927e-c14398c7943e",
+      "name": "SSH Request a Write",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "labCredential": "report",
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "if [ -e /tmp/lccs-playground-11-should-not-exist ]; then echo 'Unexpected file found'; exit 1; fi; echo 'No file created'",
+        "cwd": "/home/automation"
+      },
+      "id": "9948c9f0-5948-5361-ab68-11c54c608ff9",
+      "name": "SSH Verify No Write",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [720, 300]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [[{"node": "SSH Request a Write", "type": "main", "index": 0}]]
+    },
+    "SSH Request a Write": {
+      "main": [[{"node": "SSH Verify No Write", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

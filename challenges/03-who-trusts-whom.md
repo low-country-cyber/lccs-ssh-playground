@@ -4,7 +4,7 @@
 
 ## Goal
 
-Find the three SSH identities in this lab: your terminal's `learner` key, n8n's `automation` key, and the server's host key. See what happens when a valid key is offered to the wrong account. You will inspect public keys and fingerprints; you do not need to display a private key.
+Find three SSH identities used in this exercise: your terminal's `learner` key, n8n's ordinary `automation` key, and the server's host key. See what happens when a valid key is offered to the wrong account. You will inspect public keys and fingerprints; you do not need to display a private key. The lab also creates a restricted automation key for Challenge 11.
 
 ## 1. Start the lab
 
@@ -15,7 +15,7 @@ docker compose up -d
 ./lab doctor
 ```
 
-Stay in the playground directory for the rest of this challenge. `./lab doctor` should confirm both SSH logins and n8n health before you try the deliberate failure below.
+Stay in the playground directory for the rest of this challenge. `./lab doctor` should confirm the SSH logins, restricted report key, and n8n health before you try the deliberate failure below.
 
 ## 2. Find the two client identities
 
@@ -30,10 +30,10 @@ You should see **different** SHA256 fingerprints. The `.pub` files are public ke
 
 ```bash
 cmp -s state/keys/console.pub state/server/learner_authorized_keys && echo 'learner accepts the console key'
-cmp -s state/keys/automation.pub state/server/automation_authorized_keys && echo 'automation accepts the automation key'
+head -n 1 state/server/automation_authorized_keys | cmp -s state/keys/automation.pub - && echo 'automation accepts the automation key'
 ```
 
-Both messages should appear. The files under `state/server/` are the public-key lists prepared for the SSH target. At startup, the target installs them as each account's `authorized_keys` file. It never receives the client private-key directory.
+Both messages should appear. The files under `state/server/` are the public-key lists prepared for the SSH target. At startup, the target installs them as each account's `authorized_keys` file. The first line of the automation list accepts the ordinary automation key; a later challenge adds a second, restricted key. The target never receives the client private-key directory.
 
 ## 4. Offer the wrong key
 
@@ -72,7 +72,7 @@ To try the automation identity in n8n:
 
 1. Open `http://localhost:5680` and create the owner account if this is a fresh lab.
 2. From the playground directory, run `./lab setup-n8n`, then refresh n8n.
-3. Open **SSH Playground - 03 - Automation Key Trust** and run it manually. Its fingerprint should match `state/keys/automation.pub` from step 2.
+3. Open **SSH Playground - 03 - Automation Key Trust** and run it manually. The first fingerprint should match `state/keys/automation.pub` from step 2.
 
 ```bash
 ./lab credential-info

@@ -26,22 +26,31 @@ create_key() {
 }
 
 # The learner keeps one console identity across both targets. n8n gets a
-# different automation identity for each target, and each server has its own
-# host key. Only public client keys are copied to the server directories.
+# different automation identity for each target, plus a report-only identity
+# for the first target. Each server has its own host key. Only public client
+# keys are copied to the server directories.
 create_key /state/keys/console lccs-playground-console
 create_key /state/keys/automation lccs-playground-automation
 create_key /state/keys/hidden-automation lccs-playground-hidden-automation
+create_key /state/keys/report-only lccs-playground-report-only
 create_key /state/server/ssh_host_ed25519_key lccs-playground-host
 create_key /state/hidden-server/ssh_host_ed25519_key lccs-playground-hidden-host
 
 # Only public client keys go into the server's authorized-keys files.
 cat /state/keys/console.pub > /state/server/learner_authorized_keys
-cat /state/keys/automation.pub > /state/server/automation_authorized_keys
+# Options on the second line follow the report-only key, not the whole
+# automation account. SSH ignores the command requested with this key and
+# always runs our fixed report. "restrict" also blocks forwarding and a PTY.
+{
+  cat /state/keys/automation.pub
+  printf 'restrict,command="/usr/local/bin/lab-report.sh" '
+  cat /state/keys/report-only.pub
+} > /state/server/automation_authorized_keys
 cat /state/keys/console.pub > /state/hidden-server/learner_authorized_keys
 cat /state/keys/hidden-automation.pub > /state/hidden-server/automation_authorized_keys
 chmod 644 /state/server/*_authorized_keys /state/hidden-server/*_authorized_keys
 
-# Pin this lab's server identity for ./lab console and ./lab automation.
+# Pin this lab's server identity for ./lab console, automation, and report.
 # Those helpers reject an unexpected host key instead of accepting it blindly.
 awk '{print "[127.0.0.1]:2222 " $1 " " $2}' \
   /state/server/ssh_host_ed25519_key.pub > /state/known_hosts
@@ -59,6 +68,7 @@ state_owner=$(stat -c '%u:%g' /state)
 chown "$state_owner" /state/keys /state/keys/console /state/keys/console.pub \
   /state/keys/automation /state/keys/automation.pub \
   /state/keys/hidden-automation /state/keys/hidden-automation.pub \
+  /state/keys/report-only /state/keys/report-only.pub \
   /state/known_hosts /state/hidden_known_hosts
 chown "$state_owner" /state/server /state/server/*
 chown "$state_owner" /state/hidden-server /state/hidden-server/*

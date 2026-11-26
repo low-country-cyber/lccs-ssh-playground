@@ -15,9 +15,12 @@ CREDENTIAL_ID = "lccs-ssh-playground-automation-v1"
 CREDENTIAL_NAME = "SSH Playground Automation"
 HIDDEN_CREDENTIAL_ID = "lccs-ssh-playground-hidden-automation-v1"
 HIDDEN_CREDENTIAL_NAME = "SSH Playground Hidden Automation"
+REPORT_CREDENTIAL_ID = "lccs-ssh-playground-report-only-v1"
+REPORT_CREDENTIAL_NAME = "SSH Playground Report Only"
 CREDENTIAL_REFS = {
     "main": {"id": CREDENTIAL_ID, "name": CREDENTIAL_NAME},
     "hidden": {"id": HIDDEN_CREDENTIAL_ID, "name": HIDDEN_CREDENTIAL_NAME},
+    "report": {"id": REPORT_CREDENTIAL_ID, "name": REPORT_CREDENTIAL_NAME},
 }
 
 

@@ -67,7 +67,7 @@ This SSH session goes to the disposable container, not your Mac's SSH server.
 2. Back in Terminal, from the repository directory, run `./lab setup-n8n`. Refresh the n8n page afterward.
 3. Open **SSH Playground - First Contact** from the workflow list and execute it manually. It should return `automation` and the lab container hostname.
 
-If you skipped Python 3, run `./lab credential-info` for the fields to enter in n8n **SSH Private Key** credentials, then import the desired JSON files from `workflows/` in the n8n editor. Open each imported SSH node and select the matching credential; the hidden target uses the second one listed by the helper. Read each key from its local file and paste it into the matching n8n credential. Keep private keys off GitHub and out of screenshots.
+If you skipped Python 3, run `./lab credential-info` for the fields to enter in n8n **SSH Private Key** credentials, then import the desired JSON files from `workflows/` in the n8n editor. Open each imported SSH node and select the matching credential; the hidden target uses the second one listed by the helper, and Challenge 11 uses the report-only credential for its first node. Read each key from its local file and paste it into the matching n8n credential. Keep private keys off GitHub and out of screenshots.
 
 ## Stop and return later
 

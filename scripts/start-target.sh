@@ -4,8 +4,9 @@
 set -eu
 
 # The server receives authorized public keys from the read-only lab mount.
-# Each account gets its own SSH directory and key, so the learner and n8n
-# automation identities stay separate.
+# Each account gets its own SSH directory and authorized-key list. The first
+# target's automation list contains both the ordinary and report-only keys;
+# the learner and automation accounts still remain separate.
 for lab_user in learner automation; do
   install -d -m 700 -o "$lab_user" -g "$lab_user" "/home/$lab_user/.ssh"
   install -m 600 -o "$lab_user" -g "$lab_user" \

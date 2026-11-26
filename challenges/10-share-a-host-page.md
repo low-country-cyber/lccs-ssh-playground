@@ -72,3 +72,5 @@ The host page still answers the first command, but Alpine can no longer reach it
 - Why can n8n read Alpine's listener only while the learner tunnel is active?
 
 If the tunnel or page fails, run `./lab doctor` and use the [troubleshooting guide](../docs/troubleshooting.md). Keep generated private keys in `state/` out of screenshots and Git.
+
+Next, try [Challenge 11: Restrict one key](11-restrict-one-key.md) to give one SSH key a fixed job.

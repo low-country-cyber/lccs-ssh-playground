@@ -17,7 +17,7 @@
         "authentication": "privateKey",
         "resource": "command",
         "operation": "execute",
-        "command": "ssh-keygen -lf /home/automation/.ssh/authorized_keys",
+        "command": "sed -n '1p' /home/automation/.ssh/authorized_keys | ssh-keygen -lf -",
         "cwd": "/home/automation"
       },
       "id": "52321e96-437d-57a2-bf84-4c8175eebc5f",

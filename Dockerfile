@@ -12,5 +12,5 @@ COPY sshd_config /etc/ssh/sshd_config
 COPY sshd_config.hidden /etc/ssh/sshd_config.hidden
 COPY services/private-web/ /srv/lab-http/
 COPY services/status-web/ /srv/lab-status/
-COPY scripts/bootstrap-keys.sh scripts/start-target.sh /usr/local/bin/
-RUN chmod 755 /usr/local/bin/bootstrap-keys.sh /usr/local/bin/start-target.sh
+COPY scripts/bootstrap-keys.sh scripts/start-target.sh scripts/lab-report.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/bootstrap-keys.sh /usr/local/bin/start-target.sh /usr/local/bin/lab-report.sh

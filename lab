@@ -11,9 +11,10 @@ Usage: ./lab COMMAND
 Commands:
   console              Open an SSH shell as the learner account
   automation [COMMAND] Run a command as the automation account
-  doctor               Check both SSH identities and n8n health
-  credential-info      Show the fields for both n8n SSH credentials
-  import-credential    Import both automation credentials after owner setup
+  report [COMMAND]     Request a command with the report-only key (fixed output)
+  doctor               Check SSH identities and n8n health
+  credential-info      Show the fields for all n8n SSH credentials
+  import-credential    Import automation credentials after owner setup
   setup-n8n            Import credentials and all bundled workflows
   ssh-config           Print a project-local SSH config for Challenge 04
   jump-config          Print the hidden-target stanza for Challenge 07
@@ -38,15 +39,28 @@ case "${1:-}" in
     shift
     exec ssh "${ssh_options[@]}" -i "$project_dir/state/keys/automation" automation@127.0.0.1 "$@"
     ;;
+  report)
+    shift
+    if [[ $# -eq 0 ]]; then
+      set -- whoami
+    fi
+    exec ssh "${ssh_options[@]}" -i "$project_dir/state/keys/report-only" automation@127.0.0.1 "$@"
+    ;;
   doctor)
     command -v ssh >/dev/null || { echo 'OpenSSH client is required.' >&2; exit 1; }
     command -v curl >/dev/null || { echo 'curl is required for the health check.' >&2; exit 1; }
-    if [[ ! -s state/keys/console || ! -s state/keys/automation || ! -s state/keys/hidden-automation || ! -s state/known_hosts || ! -s state/hidden_known_hosts ]]; then
+    if [[ ! -s state/keys/console || ! -s state/keys/automation || ! -s state/keys/hidden-automation || ! -s state/keys/report-only || ! -s state/known_hosts || ! -s state/hidden_known_hosts ]]; then
       echo 'Generated SSH state is missing. Run docker compose up -d.' >&2
       exit 1
     fi
     ./lab console 'whoami && hostname'
     ./lab automation 'whoami && hostname'
+    report_output=$(./lab report 'whoami')
+    if [[ "$report_output" != *'LCCS SSH Playground: restricted report'* ]]; then
+      echo 'The report-only key did not return its fixed report.' >&2
+      exit 1
+    fi
+    echo 'Restricted report key passed.'
     n8n_ready=false
     for ((attempt=1; attempt<=30; attempt++)); do
       if curl --fail --silent http://127.0.0.1:5680/healthz >/dev/null; then
@@ -79,6 +93,14 @@ Host:        hidden-target
 Port:        22
 Username:    automation
 Private key: $project_dir/state/keys/hidden-automation (read locally; do not publish)
+Passphrase:  blank
+
+SSH Playground Report Only (first target; fixed report, no forwarding)
+Type:        SSH Private Key
+Host:        ssh-target
+Port:        22
+Username:    automation
+Private key: $project_dir/state/keys/report-only (read locally; do not publish)
 Passphrase:  blank
 EOF
     ;;

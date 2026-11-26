@@ -27,19 +27,39 @@ CREDENTIAL_SPECS = (
         "lccs-ssh-playground-hidden-automation-v1",
         "SSH Playground Hidden Automation",
     ),
+    (
+        "ssh-target",
+        "report-only",
+        "lccs-ssh-playground-report-only-v1",
+        "SSH Playground Report Only",
+    ),
 )
+REPORT_KEY_OPTIONS = 'restrict,command="/usr/local/bin/lab-report.sh" '
 
 
 def main() -> int:
-    # The learner's console key never enters n8n. Check both automation public
-    # keys against the running targets before importing their private halves.
+    # The learner's console key never enters n8n. Check the exact public-key
+    # lists on both running targets before importing any private halves. The
+    # first target has a plain automation key and a restricted report key.
     key_paths = []
+    public_keys = {}
     for service, key_name, _, _ in CREDENTIAL_SPECS:
         key_path = PROJECT_DIR / "state" / "keys" / key_name
         public_key_path = PROJECT_DIR / "state" / "keys" / f"{key_name}.pub"
         if not key_path.is_file() or not public_key_path.is_file():
             print("Lab key is missing. Run docker compose up -d first.", file=sys.stderr)
             return 1
+        public_keys[key_name] = public_key_path.read_text().strip()
+        key_paths.append(key_path)
+
+    expected_keys = {
+        "ssh-target": [
+            public_keys["automation"],
+            REPORT_KEY_OPTIONS + public_keys["report-only"],
+        ],
+        "hidden-target": [public_keys["hidden-automation"]],
+    }
+    for service, expected in expected_keys.items():
         target_key = subprocess.run(
             ["docker", "compose", "exec", "-T", service, "cat", "/home/automation/.ssh/authorized_keys"],
             cwd=PROJECT_DIR,
@@ -50,14 +70,13 @@ def main() -> int:
         if target_key.returncode != 0:
             print(f"Cannot read the running {service}. Run docker compose up -d first.", file=sys.stderr)
             return 1
-        if target_key.stdout.strip() != public_key_path.read_text().strip():
+        if target_key.stdout.splitlines() != expected:
             print(
-                f"The running {service} uses a different automation key. Another playground clone may be active. "
+                f"The running {service} uses different automation keys. Another playground clone may be active. "
                 "Use one clone for this lab.",
                 file=sys.stderr,
             )
             return 1
-        key_paths.append(key_path)
 
     # n8n needs its owner account before a personal credential can be imported.
     try:
@@ -87,7 +106,7 @@ def main() -> int:
             },
         })
 
-    # Pass both credentials through stdin, avoiding keys in command arguments
+    # Pass credentials through stdin, avoiding keys in command arguments
     # or a temporary JSON file. Capture CLI output without exposing the keys.
     result = subprocess.run(
         ["docker", "compose", "exec", "-T", "-u", "node", "n8n", "n8n", "import:credentials", "--input=/dev/stdin"],
@@ -97,11 +116,11 @@ def main() -> int:
         capture_output=True,
         check=False,
     )
-    if result.returncode != 0 or "Successfully imported 2 credentials." not in result.stdout:
+    if result.returncode != 0 or "Successfully imported 3 credentials." not in result.stdout:
         print("Credential import failed. Check n8n owner setup and Compose logs.", file=sys.stderr)
         return 1
 
-    print("Imported both SSH Playground automation credentials. Refresh n8n to see them.")
+    print("Imported all three SSH Playground automation credentials. Refresh n8n to see them.")
     return 0
 
 
