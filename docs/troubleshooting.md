@@ -40,7 +40,15 @@ Keep the SSH command running in Terminal A while you use `curl` or a browser in 
 
 ## Challenge 07 jump connection fails
 
-Check that your project-local config contains both blocks: `./lab ssh-config > state/ssh_config`, then `./lab jump-config >> state/ssh_config`. Run `ssh -G -F state/ssh_config hidden-lab` to inspect the route, then `ssh -F state/ssh_config playground 'whoami'` to check the first hop. `docker compose ps` should show both SSH targets healthy. The hidden server's pinned host key is in `state/hidden_known_hosts`; do not disable host-key checking to make a mismatch disappear.
+If SSH says `Can't open user config file state/ssh_config`, create it from the playground directory:
+
+```bash
+./lab ssh-config > state/ssh_config
+./lab jump-config >> state/ssh_config
+chmod 600 state/ssh_config
+```
+
+The project-local config needs both host blocks. Run `ssh -G -F state/ssh_config hidden-lab` to inspect the route, then `ssh -F state/ssh_config playground 'whoami'` to check the first hop. `docker compose ps` should show both SSH targets healthy. The hidden server's pinned host key is in `state/hidden_known_hosts`; do not disable host-key checking to make a mismatch disappear.
 
 ## Start fresh
 

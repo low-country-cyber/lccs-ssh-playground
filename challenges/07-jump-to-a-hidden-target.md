@@ -8,7 +8,7 @@ Connect from your terminal to a second Alpine SSH server that has no published h
 
 ## 1. Start from a fresh clone
 
-In the playground directory:
+In the playground directory, run the whole block below. If you already completed the README Quick Start, you still need the last three commands: Docker Compose generates keys, while these commands create `state/ssh_config`.
 
 ```bash
 docker compose up -d
