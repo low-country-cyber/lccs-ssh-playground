@@ -16,6 +16,8 @@ The SSH and n8n ports bind to your machine's loopback interface. Generated priva
 
 Follow the [setup guide](docs/install.md) for Windows with WSL, macOS, Ubuntu, Debian, and Fedora. It explains how to install Docker and Compose, Git, an SSH client, and the small optional tools used by the helper commands.
 
+On a Mac, use the [step-by-step Mac walkthrough](docs/mac.md) from installation through the first n8n run.
+
 Already have Docker? Check that these commands work before continuing:
 
 ```bash
@@ -81,6 +83,7 @@ Running `docker compose up -d` again preserves all three SSH key pairs. To start
 
 - [First Contact challenge](challenges/01-first-contact.md)
 - [Installation guide](docs/install.md)
+- [Mac walkthrough](docs/mac.md)
 - [Troubleshooting and reset](docs/troubleshooting.md)
 - [Security boundaries](SECURITY.md)
 

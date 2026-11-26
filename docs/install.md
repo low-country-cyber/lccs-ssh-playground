@@ -31,11 +31,7 @@ Use the Quick start commands from the [README](../README.md#quick-start) in that
 
 ### macOS: Docker Desktop
 
-1. Follow Docker's [macOS installation guide](https://docs.docker.com/desktop/setup/install/mac-install/). Open Docker Desktop and wait for it to say the engine is running.
-2. Check for `git`, `ssh`, and `curl` using the commands below. If Git is missing, use the [Git installation guide](https://git-scm.com/install/mac). macOS normally provides an SSH client and curl.
-3. Python 3 is optional unless you want `./lab import-credential`; use [Python's download page](https://www.python.org/downloads/) or your preferred package manager if it is missing.
-
-Then follow the [Quick start](../README.md#quick-start) in Terminal.
+Follow the dedicated [Mac walkthrough](mac.md). It covers Docker Desktop installation, tool checks, cloning, the first terminal SSH session, the n8n credential, and stopping the lab.
 
 ### Ubuntu or Debian: Docker Engine + Compose plugin
 
