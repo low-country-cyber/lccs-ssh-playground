@@ -31,6 +31,7 @@ ssh -V
 Run these commands in a terminal. On Windows, use an Ubuntu WSL terminal with Docker Desktop's WSL integration enabled.
 
 ```bash
+cd ~
 git clone https://github.com/low-country-cyber/lccs-ssh-playground.git
 cd lccs-ssh-playground
 docker compose up -d

@@ -2,6 +2,10 @@
 
 Start with `./lab status` and `./lab doctor` in the repository directory. The messages below cover common first-run problems.
 
+## Git says it cannot create the work tree and the shell says "getwd: no such file or directory"
+
+Your terminal may still be inside a previous playground clone that was deleted. Run `cd ~` to enter an existing directory, then retry the [Quick start](../README.md#quick-start). Run `cd lccs-ssh-playground` only after `git clone` succeeds.
+
 ## Docker command or Compose is missing
 
 Follow the [installation guide](install.md). The project uses `docker compose` with a space, which requires the Compose plugin or Docker Desktop.
