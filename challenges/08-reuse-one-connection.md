@@ -6,9 +6,9 @@
 
 Open one background SSH connection from your computer to the first Alpine target, run two commands through it, and close it. OpenSSH calls the background connection a **master** and the later commands **multiplexed sessions**.
 
-## 1. Prepare a private socket directory
+## 1. Start the lab and open the master
 
-Run this from the root of a fresh playground clone:
+On a fresh clone, `state/ssh_config` does not exist yet. Run **this entire block** from the playground directory; it starts the lab, creates that local config and a private socket directory, and then opens the SSH connection:
 
 ```bash
 docker compose up -d
@@ -17,20 +17,13 @@ docker compose up -d
 chmod 600 state/ssh_config
 mkdir -p state/mux
 chmod 700 state/mux
-```
-
-The SSH config points `playground` at `learner@127.0.0.1:2222`, uses your generated console key, and checks the pinned server key. The control socket will live in `state/mux/`, which Git ignores. Keep working from the playground directory while using the relative socket path below.
-
-## 2. Start and inspect the master
-
-```bash
 ssh -F state/ssh_config -M -S state/mux/playground.sock -fN playground
 ssh -F state/ssh_config -S state/mux/playground.sock -O check playground
 ```
 
-The second command should report a running master and its process ID. `-M` makes this connection the master; `-S` names its local control socket; `-fN` sends it to the background without running a remote command. The socket is a local coordination file on your computer, not a file on the Alpine server.
+The config points `playground` at `learner@127.0.0.1:2222`, uses your generated console key, and checks the pinned server key. The final command should report a running master and its process ID. `-M` makes this connection the master; `-S` names its local control socket; `-fN` sends it to the background without running a remote command. The socket lives under Git-ignored `state/mux/` on your computer, not on the Alpine server. Keep working from the playground directory while using the relative socket path below.
 
-## 3. Send two sessions through it
+## 2. Send two sessions through it
 
 ```bash
 ssh -F state/ssh_config -S state/mux/playground.sock -o ControlMaster=auto playground 'whoami'
@@ -42,7 +35,7 @@ Expect `learner`, then the target's hostname, then the same master process ID. `
 
 To see the reuse directly, add `-v` to either command in this section and look for a line containing `mux_client_request_session` in the diagnostic output.
 
-## 4. Close it
+## 3. Close it
 
 ```bash
 ssh -F state/ssh_config -S state/mux/playground.sock -O exit playground
