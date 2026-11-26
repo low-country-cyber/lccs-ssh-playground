@@ -4,4 +4,6 @@ This stack is a local training lab. Its published SSH and n8n ports bind to the 
 
 The private keys in `state/keys/` are generated locally with restricted permissions. The learner keeps the console private key on the host while the first target forwards an encrypted connection to the hidden target. Each target has its own host key and n8n automation key. The `state/` directory is ignored by Git and excluded from Docker build context. After owner setup, `./lab setup-n8n` sends the automation private keys through a pipe to n8n's local CLI and imports inactive workflows with references to the corresponding credentials. Public workflow JSON files contain no credential ID or private key. The helper does not write a plaintext credential export or print either key. Rerunning it skips existing workflows but refreshes the lab credentials. n8n stores its data in a persistent Compose volume.
 
+Challenge 08 places its OpenSSH control socket under `state/mux/` on the host after setting that directory to mode `700`. The socket is for host-terminal sessions; it is not mounted into n8n or either SSH target.
+
 The lab's passwords are random and unknown, and SSH password authentication is disabled. Do not put real infrastructure keys, customer data, or production hosts into this playground. Review `git status` and the staged file list before publishing this repository.

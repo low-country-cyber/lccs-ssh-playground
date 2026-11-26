@@ -72,3 +72,5 @@ n8n uses the separate **SSH Playground Hidden Automation** credential. Because n
 - Why does n8n connect to `hidden-target:22` directly while your host terminal uses a jump?
 
 If the connection fails, run `./lab doctor`, check both `ssh-target` and `hidden-target` in `docker compose ps`, and use the [troubleshooting guide](../docs/troubleshooting.md). Keep generated private keys in `state/` and out of screenshots and Git.
+
+Next: [Challenge 08: Reuse one SSH connection](08-reuse-one-connection.md).

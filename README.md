@@ -95,6 +95,7 @@ Running `docker compose up -d` again preserves all generated SSH key pairs. To s
 - [Deliver a file challenge](challenges/05-deliver-a-file.md)
 - [Reach a private web service challenge](challenges/06-reach-a-private-service.md)
 - [Reach a hidden SSH target challenge](challenges/07-jump-to-a-hidden-target.md)
+- [Reuse one SSH connection challenge](challenges/08-reuse-one-connection.md)
 - [Installation guide](docs/install.md)
 - [Mac walkthrough](docs/mac.md)
 - [Troubleshooting and reset](docs/troubleshooting.md)
