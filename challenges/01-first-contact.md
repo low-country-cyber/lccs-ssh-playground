@@ -8,7 +8,9 @@ Reach the same disposable SSH target from two places: your terminal and an n8n w
 
 ## Terminal route
 
-Start the lab with `docker compose up -d`, then run `./lab doctor`. Open the learner shell with `./lab console` and run:
+Work from the playground directory. If the lab isn't already running, start it with `docker compose up -d`. The `up` command starts the services defined in `compose.yml`. The `-d` flag means *detached* and keeps them running in the background, so your terminal is free for SSH.
+
+Run `./lab doctor` to check the lab. Open the learner shell with `./lab console` and try these commands.
 
 ```sh
 whoami

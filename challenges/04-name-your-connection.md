@@ -8,10 +8,15 @@ Replace the long command from Challenge 02 with a memorable SSH host name. You w
 
 ## 1. Start the lab
 
-From a fresh clone of the playground:
+Work from the playground directory. If the lab isn't already running, start it now.
 
 ```bash
 docker compose up -d
+```
+
+With the lab running, check that it's ready.
+
+```bash
 ./lab doctor
 ```
 

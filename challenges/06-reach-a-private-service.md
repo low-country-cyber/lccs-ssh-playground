@@ -8,10 +8,15 @@ Use an SSH local port forward to open a web page that listens only inside the Al
 
 ## 1. Start the lab
 
-From a fresh clone of the playground:
+Work from the playground directory. If the lab isn't already running, start it now.
 
 ```bash
 docker compose up -d
+```
+
+With the lab running, check it and create the SSH config for the tunnel.
+
+```bash
 ./lab doctor
 ./lab ssh-config > state/ssh_config
 chmod 600 state/ssh_config

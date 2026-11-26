@@ -8,10 +8,15 @@ Use one local SOCKS proxy to visit two different private web pages inside the Al
 
 ## 1. Start the lab and proxy in Terminal A
 
-From the playground directory in a fresh clone, run **this entire block**:
+Work from the playground directory. If the lab isn't already running, start it now.
 
 ```bash
 docker compose up -d
+```
+
+With the lab running, check it, create the SSH config, and open the proxy in Terminal A.
+
+```bash
 ./lab doctor
 ./lab ssh-config > state/ssh_config
 chmod 600 state/ssh_config

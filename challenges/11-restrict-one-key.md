@@ -8,11 +8,23 @@ Use two different keys for the **same** `automation` account. One runs ordinary 
 
 The commands use `~/lccs-ssh-playground`, the folder created by the README Quick Start. If you cloned elsewhere, use that folder in the `cd` line.
 
-## 1. Start a fresh lab
+## 1. Check the lab
+
+Enter the playground directory.
 
 ```bash
 cd ~/lccs-ssh-playground
+```
+
+If the lab isn't already running, start it now.
+
+```bash
 docker compose up -d
+```
+
+With the lab running, check that the keys and n8n are ready.
+
+```bash
 ./lab doctor
 ```
 

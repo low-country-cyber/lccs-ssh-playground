@@ -6,12 +6,17 @@
 
 Move a harmless file from your host to the Alpine lab with `scp`, retrieve it with `sftp`, and confirm the round trip did not change its contents. Both tools use the same SSH identity and host-key settings as your terminal connection.
 
-## 1. Start from a fresh clone
+## 1. Prepare the SSH config
 
-In the playground directory, run:
+Work from the playground directory. If the lab isn't already running, start it now.
 
 ```bash
 docker compose up -d
+```
+
+With the lab running, check it and create the SSH config for the file transfer.
+
+```bash
 ./lab doctor
 ./lab ssh-config > state/ssh_config
 chmod 600 state/ssh_config

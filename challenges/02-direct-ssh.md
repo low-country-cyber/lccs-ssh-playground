@@ -8,7 +8,7 @@ Reach the Alpine SSH target from your host terminal using `ssh` directly. Challe
 
 ## Connect
 
-Start the lab with `docker compose up -d` and run `./lab doctor`. From the playground directory, enter:
+Work from the playground directory. If the lab isn't already running, start it with `docker compose up -d`. Run `./lab doctor` to check the lab. Then enter the SSH command below.
 
 ```bash
 ssh -p 2222 \

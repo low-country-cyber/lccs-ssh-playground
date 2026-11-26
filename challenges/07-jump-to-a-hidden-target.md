@@ -6,12 +6,17 @@
 
 Connect from your terminal to a second Alpine SSH server that has no published host port. The first server will act as a jump host. You will still authenticate to the hidden server with a key on **your computer**, and you will verify its own host key.
 
-## 1. Start from a fresh clone
+## 1. Prepare the SSH config
 
-In the playground directory, run the whole block below. If you already completed the README Quick Start, you still need the last three commands: Docker Compose generates keys, while these commands create `state/ssh_config`.
+Work from the playground directory. If the lab isn't already running, start it now.
 
 ```bash
 docker compose up -d
+```
+
+Run the following block even if the lab was already running. It checks the lab and creates `state/ssh_config` with both the first server and the hidden target.
+
+```bash
 ./lab doctor
 ./lab ssh-config > state/ssh_config
 ./lab jump-config >> state/ssh_config

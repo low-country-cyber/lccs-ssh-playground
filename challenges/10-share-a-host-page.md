@@ -6,15 +6,25 @@
 
 Serve a harmless web page on your computer and let the Alpine target reach it through an SSH reverse forward. You will see which side owns each port, then let n8n check the same route while the tunnel is open.
 
-The commands below use `~/lccs-ssh-playground`, the folder created by the README Quick Start. If you cloned elsewhere, replace that path in each `cd` line. A new terminal may open in `~`, so each terminal block begins by entering the playground directory.
+The commands below use `~/lccs-ssh-playground`, the folder created by the README Quick Start. If you cloned elsewhere, replace that path in each `cd` line. A new terminal may open in `~`, so the first command in each terminal takes you to the playground directory.
 
 ## 1. Start the lab and host page in Terminal A
 
-From a fresh playground clone, run **this entire block** in the repository directory:
+In Terminal A, enter the playground directory.
 
 ```bash
 cd ~/lccs-ssh-playground
+```
+
+If the lab isn't already running, start it now.
+
+```bash
 docker compose up -d
+```
+
+With the lab running, check it, create the SSH config, and start the host page in Terminal A.
+
+```bash
 ./lab doctor
 ./lab ssh-config > state/ssh_config
 chmod 600 state/ssh_config

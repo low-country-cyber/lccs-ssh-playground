@@ -8,10 +8,15 @@ Find three SSH identities used in this exercise: your terminal's `learner` key, 
 
 ## 1. Start the lab
 
-From a fresh clone of the playground, run:
+Work from the playground directory. If the lab isn't already running, start it now.
 
 ```bash
 docker compose up -d
+```
+
+With the lab running, check the SSH logins and n8n health.
+
+```bash
 ./lab doctor
 ```
 

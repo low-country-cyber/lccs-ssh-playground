@@ -8,10 +8,15 @@ Open one background SSH connection from your computer to the first Alpine target
 
 ## 1. Start the lab and open the master
 
-On a fresh clone, `state/ssh_config` does not exist yet. Run **this entire block** from the playground directory; it starts the lab, creates that local config and a private socket directory, and then opens the SSH connection:
+Work from the playground directory. If the lab isn't already running, start it now.
 
 ```bash
 docker compose up -d
+```
+
+Run the following block even if the lab was already running. It checks the lab, creates the SSH config and a private socket directory, and opens the master connection.
+
+```bash
 ./lab doctor
 ./lab ssh-config > state/ssh_config
 chmod 600 state/ssh_config
