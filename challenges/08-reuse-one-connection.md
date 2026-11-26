@@ -57,3 +57,5 @@ This companion shows how two n8n SSH nodes reuse one saved credential. n8n makes
 - How is reusing one OpenSSH connection different from reusing one n8n credential?
 
 If a command fails, run `./lab doctor` and check the [troubleshooting guide](../docs/troubleshooting.md). Keep `state/` and its private keys out of screenshots and Git.
+
+Next: [Challenge 09: Reach two services with one SOCKS proxy](09-one-proxy-two-services.md).

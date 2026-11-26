@@ -1,0 +1,53 @@
+{
+  "name": "SSH Playground - 09 - Two Private Services",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "22e61d6c-bc4c-5f33-8923-7df5b9dcab7b",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "wget -qO- http://127.0.0.1:8080/ | grep 'LCCS SSH Playground private service'",
+        "cwd": "/home/automation"
+      },
+      "id": "9d53e048-b0a4-5771-95b3-adec6cf3b521",
+      "name": "SSH First Private Page",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "wget -qO- http://127.0.0.1:8081/ | grep 'LCCS SSH Playground status service'",
+        "cwd": "/home/automation"
+      },
+      "id": "01fa6e12-10f3-5887-8493-35b7104cedf5",
+      "name": "SSH Second Private Page",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [720, 300]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [[{"node": "SSH First Private Page", "type": "main", "index": 0}]]
+    },
+    "SSH First Private Page": {
+      "main": [[{"node": "SSH Second Private Page", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

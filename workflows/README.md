@@ -4,7 +4,7 @@ After creating the lab's n8n owner account, run `./lab setup-n8n` from the repos
 
 | Files | SSH destination | Credential |
 | --- | --- | --- |
-| `01` through `06`, `08` | First target, `ssh-target:22` | SSH Playground Automation |
+| `01` through `06`, `08`, `09` | First target, `ssh-target:22` | SSH Playground Automation |
 | `07` | Hidden target, `hidden-target:22` | SSH Playground Hidden Automation |
 
 The JSON templates contain no private keys or n8n credential IDs. The `labCredential` marker on an SSH node selects a lab destination; `scripts/setup-n8n.py` removes that marker and binds the matching credential during import. If you import a JSON file manually in n8n, open its SSH node and select the matching credential yourself.

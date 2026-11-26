@@ -50,6 +50,10 @@ chmod 600 state/ssh_config
 
 The project-local config needs both host blocks. Run `ssh -G -F state/ssh_config hidden-lab` to inspect the route, then `ssh -F state/ssh_config playground 'whoami'` to check the first hop. `docker compose ps` should show both SSH targets healthy. The hidden server's pinned host key is in `state/hidden_known_hosts`; do not disable host-key checking to make a mismatch disappear.
 
+## Challenge 09 SOCKS proxy does not reach a page
+
+Keep Terminal A's `ssh -D` command running while using `curl` in Terminal B. If port `11080` is occupied, change that host-side port in the SSH command and both `curl` commands. The page ports inside Alpine stay `8080` and `8081`. Use `--noproxy ''` so a local proxy-bypass setting does not skip the SOCKS proxy. Run `./lab doctor` if the SSH connection itself fails.
+
 ## Start fresh
 
 This removes **this playground's generated SSH keys and Compose volume**, including its n8n owner account, workflows, credentials, and all SSH key pairs. Practice files such as `state/parcel.txt` remain. Review what you need to keep first. From the playground repository directory:

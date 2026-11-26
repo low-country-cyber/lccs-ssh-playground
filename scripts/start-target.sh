@@ -18,10 +18,11 @@ printf '%s\n' "LCCS SSH Playground: ${LAB_TARGET_LABEL:-First Contact}" \
   > /home/learner/README.txt
 chown learner:learner /home/learner/README.txt
 
-# Only the first target runs the Challenge 06 page. The hidden target is a
-# separate SSH endpoint for Challenge 07, with no web listener to confuse it.
+# Only the first target runs the private pages for Challenges 06 and 09.
+# The hidden target stays a separate SSH endpoint with no web listener.
 if [ "${LAB_WEB_SERVICE:-yes}" = yes ]; then
   busybox-extras httpd -p 127.0.0.1:8080 -h /srv/lab-http
+  busybox-extras httpd -p 127.0.0.1:8081 -h /srv/lab-status
 fi
 
 # Stay in the foreground so Docker can supervise sshd and collect its logs.
