@@ -53,6 +53,10 @@ The first line of output should be `learner`; the second is the lab container's 
 - What would `ssh` do if the server key no longer matched `state/known_hosts`?
 - Why does n8n use `ssh-target:22` while your host terminal uses `127.0.0.1:2222`?
 
+## n8n companion
+
+After owner setup, run `./lab setup-n8n` once and refresh n8n. Open **SSH Playground - 02 - Connection Routes** and execute it manually. It reaches the same target as `automation` through the Compose network.
+
 If the connection fails, use the [troubleshooting guide](../docs/troubleshooting.md). Keep the private key in `state/keys/console` local; never paste it into an issue or screenshot.
 
 Next, try [Challenge 03: Who trusts whom?](03-who-trusts-whom.md) to see why your key works for `learner` and how your terminal recognizes the server.

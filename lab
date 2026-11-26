@@ -14,6 +14,7 @@ Commands:
   doctor               Check both SSH identities and n8n health
   credential-info      Show the fields for an n8n SSH credential
   import-credential    Import the automation credential after n8n owner setup
+  setup-n8n            Import the credential and all bundled workflows
   ssh-config           Print a project-local SSH config for Challenge 04
   status               Show Compose service status
 EOF
@@ -72,6 +73,9 @@ EOF
     ;;
   import-credential)
     python3 "$project_dir/scripts/import-credential.py"
+    ;;
+  setup-n8n)
+    python3 "$project_dir/scripts/setup-n8n.py"
     ;;
   ssh-config)
     cat <<EOF

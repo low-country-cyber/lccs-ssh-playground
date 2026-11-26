@@ -71,8 +71,8 @@ These should show the **same** SHA256 fingerprint. The first file is the server'
 To try the automation identity in n8n:
 
 1. Open `http://localhost:5680` and create the owner account if this is a fresh lab.
-2. From the playground directory, run `./lab import-credential`, then refresh n8n.
-3. Import [`workflows/01-first-contact.json`](../workflows/01-first-contact.json), choose **SSH Playground Automation** in its SSH node, and run it manually. The output should begin with `automation`.
+2. From the playground directory, run `./lab setup-n8n`, then refresh n8n.
+3. Open **SSH Playground - 03 - Automation Key Trust** and run it manually. Its fingerprint should match `state/keys/automation.pub` from step 2.
 
 ```bash
 ./lab credential-info

@@ -1,0 +1,50 @@
+{
+  "name": "SSH Playground - 04 - Alias Independence",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "0039248f-cf97-5ed5-8a8f-45358b558496",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "printf \"n8n account: \"; whoami; printf \"SSH connection: %s\\n\" \"$SSH_CONNECTION\"",
+        "cwd": "/home/automation"
+      },
+      "id": "f575b809-0dc6-5daa-8a78-88ff75ea3910",
+      "name": "SSH n8n Connection",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "SSH n8n Connection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

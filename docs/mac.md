@@ -64,11 +64,10 @@ This SSH session goes to the disposable container, not your Mac's SSH server.
 ## 5. Try the same task in n8n
 
 1. Open [http://localhost:5680](http://localhost:5680) in your browser and create the lab's owner account.
-2. Back in Terminal, from the repository directory, run `./lab import-credential`. Refresh the n8n page afterward.
-3. Import [`workflows/01-first-contact.json`](../workflows/01-first-contact.json) in n8n. Open its SSH node and choose **SSH Playground Automation** as the credential.
-4. Execute the workflow manually. It should return `automation` and the lab container hostname.
+2. Back in Terminal, from the repository directory, run `./lab setup-n8n`. Refresh the n8n page afterward.
+3. Open **SSH Playground - First Contact** from the workflow list and execute it manually. It should return `automation` and the lab container hostname.
 
-If you skipped Python 3, run `./lab credential-info` for the fields to enter in a new n8n **SSH Private Key** credential. Read the key from the local file it names and paste the entire key into n8n. Keep the private key off GitHub and out of screenshots.
+If you skipped Python 3, run `./lab credential-info` for the fields to enter in a new n8n **SSH Private Key** credential, then import the desired JSON files from `workflows/` in the n8n editor. Read the key from the local file it names and paste the entire key into n8n. Keep the private key off GitHub and out of screenshots.
 
 ## Stop and return later
 

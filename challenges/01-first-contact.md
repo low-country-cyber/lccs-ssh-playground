@@ -20,7 +20,7 @@ Type `exit` when done. The generated `state/known_hosts` file pins the lab serve
 
 ## n8n route
 
-Create the owner account at `http://localhost:5680`, then run `./lab import-credential`. Import `workflows/01-first-contact.json`, select the imported SSH credential in the SSH node, and execute the workflow manually.
+Create the owner account at `http://localhost:5680`, then run `./lab setup-n8n` from the playground directory and refresh n8n. Open **SSH Playground - First Contact** from the workflow list and execute it manually. The setup command imports all bundled workflows with their SSH credential already selected.
 
 The expected first output line is `automation`. The second line is the lab target's hostname. The workflow is inactive until you choose to run it.
 

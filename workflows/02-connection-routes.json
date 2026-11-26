@@ -1,0 +1,50 @@
+{
+  "name": "SSH Playground - 02 - Connection Routes",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "666f562a-66e6-58fd-89d4-6899f2deed05",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "printf \"n8n account: \"; whoami; printf \"SSH target: \"; hostname; printf \"working directory: \"; pwd",
+        "cwd": "/home/automation"
+      },
+      "id": "c5fc739a-cd2e-5482-ac99-eea1faec9f6e",
+      "name": "SSH Connection Routes",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "SSH Connection Routes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

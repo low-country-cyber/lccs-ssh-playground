@@ -19,8 +19,32 @@ PROJECT_DIR = Path(__file__).resolve().parent.parent
 def main() -> int:
     # This is the automation identity, not the learner's terminal SSH key.
     key_path = PROJECT_DIR / "state" / "keys" / "automation"
+    public_key_path = PROJECT_DIR / "state" / "keys" / "automation.pub"
     if not key_path.is_file():
         print("Lab key is missing. Run docker compose up -d first.", file=sys.stderr)
+        return 1
+    if not public_key_path.is_file():
+        print("Lab public key is missing. Run docker compose up -d first.", file=sys.stderr)
+        return 1
+
+    # A second clone can replace this Compose project's SSH target. Check its
+    # public key before importing a private key that the target would reject.
+    target_key = subprocess.run(
+        ["docker", "compose", "exec", "-T", "ssh-target", "cat", "/home/automation/.ssh/authorized_keys"],
+        cwd=PROJECT_DIR,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if target_key.returncode != 0:
+        print("Cannot read the running SSH target. Run docker compose up -d first.", file=sys.stderr)
+        return 1
+    if target_key.stdout.strip() != public_key_path.read_text().strip():
+        print(
+            "The running SSH target uses a different automation key. Another playground clone may be active. "
+            "Use one clone for this lab.",
+            file=sys.stderr,
+        )
         return 1
 
     # n8n needs its owner account before a personal credential can be imported.

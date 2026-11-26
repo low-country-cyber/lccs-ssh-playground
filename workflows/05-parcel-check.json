@@ -1,0 +1,50 @@
+{
+  "name": "SSH Playground - 05 - Parcel Check",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b29e5f34-fefc-5989-8628-348853a70257",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "sha256sum /home/learner/parcel.txt",
+        "cwd": "/home/automation"
+      },
+      "id": "f3a55bb5-3264-53b1-a84e-fadeebd9ac8f",
+      "name": "SSH Parcel Check",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "SSH Parcel Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

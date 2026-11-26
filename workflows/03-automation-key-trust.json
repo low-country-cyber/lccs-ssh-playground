@@ -1,0 +1,50 @@
+{
+  "name": "SSH Playground - 03 - Automation Key Trust",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "97d8c809-d874-5e92-9768-eacbd67c8bfc",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "ssh-keygen -lf /home/automation/.ssh/authorized_keys",
+        "cwd": "/home/automation"
+      },
+      "id": "52321e96-437d-57a2-bf84-4c8175eebc5f",
+      "name": "SSH Automation Key Fingerprint",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "SSH Automation Key Fingerprint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

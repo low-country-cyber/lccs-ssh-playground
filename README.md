@@ -61,11 +61,10 @@ To see the OpenSSH command behind `./lab console`, try [Challenge 02: Connect wi
 ### Step 2: connect from n8n
 
 1. Open [http://localhost:5680](http://localhost:5680) and create the owner account for this new lab instance.
-2. Run `./lab import-credential` in your terminal. This imports the dedicated automation key into the owner's personal credentials without displaying the private key or needing an n8n API key. Refresh n8n afterward.
-3. In the n8n editor, import [`workflows/01-first-contact.json`](workflows/01-first-contact.json). Open its SSH node and select **SSH Playground Automation** as the credential.
-4. Execute the workflow manually. Its output should show `automation` and the lab target's hostname.
+2. Run `./lab setup-n8n` in your terminal, then refresh n8n. This imports the dedicated automation credential and every bundled workflow without displaying the private key or needing an n8n API key.
+3. Open **SSH Playground - First Contact** from the workflow list and execute it manually. Its output should show `automation` and the lab target's hostname.
 
-The workflow file contains no credential ID and is not scheduled or published. The n8n container reaches the SSH target at `ssh-target:22` on the Compose network; your terminal reaches it at `127.0.0.1:2222` through the host port mapping.
+All bundled workflows stay inactive until you choose to run them. The public [workflow files](workflows/) contain no private key or credential ID; `./lab setup-n8n` binds the lab credential during import. You can rerun setup after adding lessons: it skips existing workflows so your edits remain, and refreshes the lab credential from the current local key. The n8n container reaches the SSH target at `ssh-target:22` on the Compose network; your terminal reaches it at `127.0.0.1:2222` through the host port mapping.
 
 Prefer to create the credential in the n8n UI yourself? Run `./lab credential-info` to see the exact fields and the local path to the automation private key. Keep that key out of chat, screenshots, and Git.
 
@@ -77,6 +76,7 @@ Prefer to create the credential in the n8n UI yourself? Run `./lab credential-in
 | `./lab doctor` | Checks both SSH logins and n8n health |
 | `./lab automation 'whoami && hostname'` | Runs a command with the automation identity |
 | `./lab credential-info` | Shows n8n SSH credential fields without printing a secret |
+| `./lab setup-n8n` | Imports the SSH credential and all bundled workflows after owner setup |
 | `docker compose logs --tail=50 ssh-target` | Shows recent SSH server logs |
 | `docker compose down` | Stops the lab while keeping keys and n8n data |
 

@@ -24,7 +24,7 @@ That is expected. It runs once to create or verify the SSH keys. The SSH target 
 
 ## n8n says the credential is missing
 
-Complete the owner setup at `http://localhost:5680`, run `./lab import-credential`, and refresh the browser. Open the imported workflow's SSH node and explicitly select **SSH Playground Automation**. The workflow file does not embed a secret or a credential ID.
+Complete the owner setup at `http://localhost:5680`, run `./lab setup-n8n`, and refresh the browser. Bundled workflows are imported with **SSH Playground Automation** already selected. The public workflow files do not embed a secret or credential ID.
 
 ## SSH says "Permission denied (publickey)"
 

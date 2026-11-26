@@ -65,6 +65,10 @@ cmp state/parcel.txt state/parcel-returned.txt && echo 'Files match'
 
 Expect `Files match`. If `cmp` reports a difference, inspect the two files and repeat the transfer. This comparison checks the actual file contents, not just the filenames.
 
+## n8n companion
+
+After the upload in step 3, create the n8n owner account if needed, run `./lab setup-n8n`, and refresh n8n. Open **SSH Playground - 05 - Parcel Check** and execute it manually. It reports the SHA256 digest of the file on the Alpine target; run it after uploading `parcel.txt` so the file exists.
+
 ## Explain what happened
 
 - In `playground:parcel.txt`, which side of the connection holds the file?

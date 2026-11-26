@@ -61,6 +61,10 @@ The result should still be `learner`. You changed the name you type, not the ser
 - Why does this lesson use `-F state/ssh_config` instead of editing your personal SSH config?
 - Does n8n use this host alias, or does its credential still connect to `ssh-target:22` inside Docker?
 
+## n8n companion
+
+After owner setup, run `./lab setup-n8n` once and refresh n8n. Open **SSH Playground - 04 - Alias Independence** and execute it manually. Its SSH connection still uses the n8n credential, regardless of what you named your host-terminal alias.
+
 If the connection fails, run `./lab doctor` and check the [troubleshooting guide](../docs/troubleshooting.md). Keep `state/keys/console` private even though its path appears in the config.
 
 Next, try [Challenge 05: Deliver a file](05-deliver-a-file.md) to use the same SSH shortcut with `scp` and `sftp`.
