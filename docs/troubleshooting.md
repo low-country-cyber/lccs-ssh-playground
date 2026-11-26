@@ -60,13 +60,14 @@ Keep the Python web server in Terminal A and the `ssh -R` command in Terminal B 
 
 ## Start fresh
 
-This removes **this playground's generated SSH keys and Compose volume**, including its n8n owner account, workflows, credentials, and all SSH key pairs. Practice files such as `state/parcel.txt` remain. Review what you need to keep first. From the playground repository directory:
+`./lab down` removes this clone's Compose stack and n8n volume, including the owner account, workflows, and credentials. It also removes **everything generated under `state/`**, including client private keys, server host keys, known-host entries, SSH configs, and practice files such as `state/parcel.txt`. The checked-in `state/.gitkeep` stays. Review any practice files you want to keep first. From the playground repository directory:
 
 ```bash
-docker compose down -v
-rm -rf state/keys state/server state/hidden-server
-rm -f state/known_hosts state/hidden_known_hosts
+./lab down
 docker compose up -d
+./lab doctor
 ```
 
-Do not run the reset commands from another directory. Run `./lab doctor` after the new startup.
+If another clone owns the running Compose stack, `./lab down` refuses to remove it and tells you which clone to use. The command retains downloaded and built Docker images so the next startup can be faster.
+
+To check the key cleanup before restarting, run `test ! -e state/keys && echo 'Lab keys removed'`. The message appears only when the generated client-key directory is gone.

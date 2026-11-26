@@ -12,6 +12,7 @@ Commands:
   console              Open an SSH shell as the learner account
   automation [COMMAND] Run a command as the automation account
   report [COMMAND]     Request a command with the report-only key (fixed output)
+  down                 Remove the lab, n8n data, and all generated state
   doctor               Check SSH identities and n8n health
   credential-info      Show the fields for all n8n SSH credentials
   import-credential    Import automation credentials after owner setup
@@ -30,6 +31,44 @@ ssh_options=(
   -o UserKnownHostsFile=./state/known_hosts
 )
 
+check_compose_owner() {
+  # Compose uses one project name for every clone. Refuse to remove a running
+  # stack whose containers were created from a different checkout.
+  local container_ids container_id owner_dir
+  container_ids=$(docker compose ps -a --orphans -q)
+  for container_id in $container_ids; do
+    owner_dir=$(docker inspect --format '{{ index .Config.Labels "com.docker.compose.project.working_dir" }}' "$container_id")
+    if [[ "$owner_dir" != "$project_dir" ]]; then
+      printf 'This lab is running from another clone: %s\nRun ./lab down from that clone.\n' "$owner_dir" >&2
+      return 1
+    fi
+  done
+}
+
+check_state_dir() {
+  local state_dir="$project_dir/state"
+  # state/ is the lab's disposable bind mount. Check its checked-in marker so
+  # a misplaced or replaced directory cannot redirect the cleanup elsewhere.
+  if [[ ! -d "$state_dir" || -L "$state_dir" || ! -f "$state_dir/.gitkeep" || -L "$state_dir/.gitkeep" ]]; then
+    echo 'The lab state directory is missing or unexpected; generated files were not removed.' >&2
+    return 1
+  fi
+}
+
+remove_generated_state() {
+  local state_dir="$project_dir/state" entry
+  check_state_dir
+  (
+    shopt -s dotglob nullglob
+    for entry in "$state_dir"/*; do
+      [[ "$entry" == "$state_dir/.gitkeep" ]] && continue
+      # Remove each ignored lab item, including hidden practice files and all
+      # private/public keys. A symlink is removed itself, not followed.
+      rm -r -- "$entry"
+    done
+  )
+}
+
 case "${1:-}" in
   console)
     shift
@@ -45,6 +84,14 @@ case "${1:-}" in
       set -- whoami
     fi
     exec ssh "${ssh_options[@]}" -i "$project_dir/state/keys/report-only" automation@127.0.0.1 "$@"
+    ;;
+  down)
+    if [[ $# -ne 1 ]]; then usage; exit 2; fi
+    check_state_dir
+    check_compose_owner
+    docker compose down -v --remove-orphans
+    remove_generated_state
+    echo 'Lab containers, n8n data, and generated state (including all lab keys) removed.'
     ;;
   doctor)
     command -v ssh >/dev/null || { echo 'OpenSSH client is required.' >&2; exit 1; }

@@ -79,13 +79,14 @@ Prefer to create the credentials in the n8n UI yourself? Run `./lab credential-i
 | `./lab doctor` | Checks SSH logins, the restricted report key, and n8n health |
 | `./lab automation 'whoami && hostname'` | Runs a command with the automation identity |
 | `./lab report 'whoami'` | Uses the report-only key; the server returns its fixed report |
+| `./lab down` | Removes this lab's containers, n8n volume, and all generated files under `state/`, including all lab SSH keys |
 | `./lab credential-info` | Shows all n8n SSH credential fields without printing secrets |
 | `./lab setup-n8n` | Imports three SSH credentials and all bundled workflows after owner setup |
 | `./lab jump-config` | Adds the hidden target to a project-local SSH config |
 | `docker compose logs --tail=50 ssh-target` | Shows recent SSH server logs |
-| `docker compose down` | Stops the lab while keeping keys and n8n data |
+| `docker compose down` | Pauses the lab while keeping keys and n8n data |
 
-Running `docker compose up -d` again preserves all generated SSH key pairs. To start completely fresh, follow the [reset instructions](docs/troubleshooting.md#start-fresh); a reset removes lab accounts, workflows, credentials, and keys.
+One command starts the stack: `docker compose up -d`. When you want to erase the lab and start over, run `./lab down` from the same clone. It deletes the n8n owner account, workflows, credentials, all generated SSH keys and host-key records, and all practice files under ignored `state/`. The checked-in `state/.gitkeep` remains. To pause without erasing data, use `docker compose down`; a later `docker compose up -d` reuses the same keys and n8n account. See [reset instructions](docs/troubleshooting.md#start-fresh) for the exact sequence.
 
 ## More help
 

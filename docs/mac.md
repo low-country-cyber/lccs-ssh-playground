@@ -76,3 +76,5 @@ docker compose down
 ```
 
 Your n8n account, workflows, credentials, and generated SSH keys remain for the next `docker compose up -d`. See [troubleshooting](troubleshooting.md) for permission, port, and reset issues.
+
+To remove the lab **and its keys** in one command instead, run `./lab down` from the playground directory. It also removes the n8n account and all practice files under `state/`; only the checked-in `state/.gitkeep` remains.
