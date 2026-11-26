@@ -87,3 +87,5 @@ This prints the connection fields and the **path** to n8n's automation key, with
 - Why must your SSH client check the server's host key before it sends a login attempt?
 
 Keep private keys out of screenshots, chat, and GitHub. If the expected results differ, see [troubleshooting](../docs/troubleshooting.md).
+
+Next, try [Challenge 04: Name your connection](04-name-your-connection.md) to turn the long SSH command into a project-local shortcut.

@@ -86,6 +86,7 @@ Running `docker compose up -d` again preserves all three SSH key pairs. To start
 - [First Contact challenge](challenges/01-first-contact.md)
 - [Connect with OpenSSH challenge](challenges/02-direct-ssh.md)
 - [Who trusts whom? challenge](challenges/03-who-trusts-whom.md)
+- [Name your connection challenge](challenges/04-name-your-connection.md)
 - [Installation guide](docs/install.md)
 - [Mac walkthrough](docs/mac.md)
 - [Troubleshooting and reset](docs/troubleshooting.md)

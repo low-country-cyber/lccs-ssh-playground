@@ -14,6 +14,7 @@ Commands:
   doctor               Check both SSH identities and n8n health
   credential-info      Show the fields for an n8n SSH credential
   import-credential    Import the automation credential after n8n owner setup
+  ssh-config           Print a project-local SSH config for Challenge 04
   status               Show Compose service status
 EOF
 }
@@ -71,6 +72,20 @@ EOF
     ;;
   import-credential)
     python3 "$project_dir/scripts/import-credential.py"
+    ;;
+  ssh-config)
+    cat <<EOF
+# Low Country Cyber Solutions SSH Playground: project-local client settings.
+Host playground
+    HostName 127.0.0.1
+    User learner
+    Port 2222
+    IdentityFile "$project_dir/state/keys/console"
+    IdentitiesOnly yes
+    StrictHostKeyChecking yes
+    UserKnownHostsFile "$project_dir/state/known_hosts"
+    ForwardAgent no
+EOF
     ;;
   status)
     docker compose ps
