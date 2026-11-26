@@ -1,0 +1,34 @@
+{
+  "name": "SSH Playground - First Contact",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b1888991-0e30-40ce-8090-8dd1908dce78",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "whoami && hostname",
+        "cwd": "/home/automation"
+      },
+      "id": "6f788763-27c5-48d5-a21e-53f9a25ff162",
+      "name": "SSH First Contact",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [480, 300]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [[{"node": "SSH First Contact", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {"executionOrder": "v1"},
+  "active": false
+}

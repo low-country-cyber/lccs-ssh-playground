@@ -1,0 +1,50 @@
+name: lccs-ssh-playground
+
+x-ssh-image: &ssh-image
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: lccs-ssh-playground/openssh:local
+
+services:
+  key-init:
+    <<: *ssh-image
+    command: /usr/local/bin/bootstrap-keys.sh
+    restart: "no"
+    volumes:
+      - ./state:/state
+
+  ssh-target:
+    <<: *ssh-image
+    command: /usr/local/bin/start-target.sh
+    depends_on:
+      key-init:
+        condition: service_completed_successfully
+    ports:
+      - "127.0.0.1:2222:22"
+    volumes:
+      - ./state/server:/lab-server:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pidof sshd >/dev/null"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:stable
+    depends_on:
+      ssh-target:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:5680:5678"
+    environment:
+      N8N_EDITOR_BASE_URL: http://localhost:5680/
+      N8N_WEBHOOK_URL: http://localhost:5680/
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+    volumes:
+      - n8n-data:/home/node/.n8n
+    restart: unless-stopped
+
+volumes:
+  n8n-data:

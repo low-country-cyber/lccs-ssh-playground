@@ -1,0 +1,29 @@
+# Challenge 01: First Contact
+
+## Goal
+
+Reach the same disposable SSH target from two places: your terminal and an n8n workflow. The terminal uses the `learner` identity. n8n uses the `automation` identity.
+
+## Terminal route
+
+Start the lab with `docker compose up -d`, then run `./lab doctor`. Open the learner shell with `./lab console` and run:
+
+```sh
+whoami
+hostname
+cat README.txt
+```
+
+Type `exit` when done. The generated `state/known_hosts` file pins the lab server's public host key, so the helper refuses an unexpected host key.
+
+## n8n route
+
+Create the owner account at `http://localhost:5680`, then run `./lab import-credential`. Import `workflows/01-first-contact.json`, select the imported SSH credential in the SSH node, and execute the workflow manually.
+
+The expected first output line is `automation`. The second line is the lab target's hostname. The workflow is inactive until you choose to run it.
+
+## Explain what happened
+
+- Why does the terminal connect to `127.0.0.1` on port `2222`, while n8n connects to `ssh-target` on port `22`?
+- Which machine holds each private key? Which machine accepts the matching public key?
+- What should happen if the SSH target presents an unexpected host key?

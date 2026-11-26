@@ -1,0 +1,4 @@
+state/*
+!state/.gitkeep
+.env
+__pycache__/

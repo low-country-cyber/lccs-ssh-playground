@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+cd "$project_dir"
+
+usage() {
+  cat <<'EOF'
+Usage: ./lab COMMAND
+
+Commands:
+  console              Open an SSH shell as the learner account
+  automation [COMMAND] Run a command as the automation account
+  doctor               Check both SSH identities and n8n health
+  credential-info      Show the fields for an n8n SSH credential
+  import-credential    Import the automation credential after n8n owner setup
+  status               Show Compose service status
+EOF
+}
+
+ssh_options=(
+  -p 2222
+  -o BatchMode=yes
+  -o IdentitiesOnly=yes
+  -o StrictHostKeyChecking=yes
+  -o UserKnownHostsFile=./state/known_hosts
+)
+
+case "${1:-}" in
+  console)
+    shift
+    exec ssh "${ssh_options[@]}" -i "$project_dir/state/keys/console" learner@127.0.0.1 "$@"
+    ;;
+  automation)
+    shift
+    exec ssh "${ssh_options[@]}" -i "$project_dir/state/keys/automation" automation@127.0.0.1 "$@"
+    ;;
+  doctor)
+    command -v ssh >/dev/null || { echo 'OpenSSH client is required.' >&2; exit 1; }
+    command -v curl >/dev/null || { echo 'curl is required for the health check.' >&2; exit 1; }
+    if [[ ! -s state/keys/console || ! -s state/keys/automation || ! -s state/known_hosts ]]; then
+      echo 'Generated SSH state is missing. Run docker compose up -d.' >&2
+      exit 1
+    fi
+    ./lab console 'whoami && hostname'
+    ./lab automation 'whoami && hostname'
+    n8n_ready=false
+    for ((attempt=1; attempt<=30; attempt++)); do
+      if curl --fail --silent http://127.0.0.1:5680/healthz >/dev/null; then
+        n8n_ready=true
+        break
+      fi
+      sleep 2
+    done
+    if [[ "$n8n_ready" != true ]]; then
+      echo 'n8n did not become healthy. Run docker compose logs n8n.' >&2
+      exit 1
+    fi
+    echo 'Both SSH identities and n8n health passed.'
+    ;;
+  credential-info)
+    cat <<EOF
+n8n URL:     http://localhost:5680
+Type:        SSH Private Key
+Host:        ssh-target
+Port:        22
+Username:    automation
+Private key: $project_dir/state/keys/automation (read locally; do not publish)
+Passphrase:  blank
+EOF
+    ;;
+  import-credential)
+    python3 "$project_dir/scripts/import-credential.py"
+    ;;
+  status)
+    docker compose ps
+    ;;
+  *) usage; exit 2 ;;
+esac
