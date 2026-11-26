@@ -56,7 +56,7 @@ Keep Terminal A's `ssh -D` command running while using `curl` in Terminal B. If 
 
 ## Challenge 10 reverse tunnel does not reach the host page
 
-Keep the Python web server in Terminal A and the `ssh -R` command in Terminal B running while you test from Terminal C or n8n. Check the host page first at `http://127.0.0.1:19090/`, then try `ssh -F state/ssh_config playground 'wget -qO- http://127.0.0.1:18090/'`. If host port `19090` is busy, use another free host port in the Python command, the last port in `-R`, and the host-side `curl` or browser URL. If the SSH command reports that remote forwarding failed, confirm that `18090` is unused inside Alpine and that you requested the exact loopback listener from the lesson. The host page and target listener use different ports on different machines.
+Keep the Python web server in Terminal A and the `ssh -R` command in Terminal B running while you test from Terminal C or n8n. If SSH says it cannot open `state/ssh_config`, run `cd ~/lccs-ssh-playground` in that terminal; if the file is still missing, complete step 1 of the lesson. Check the host page first at `http://127.0.0.1:19090/`, then try `ssh -F state/ssh_config playground 'wget -qO- http://127.0.0.1:18090/'`. If host port `19090` is busy, use another free host port in the Python command, the last port in `-R`, and the host-side `curl` or browser URL. If the SSH command reports that remote forwarding failed, confirm that `18090` is unused inside Alpine and that you requested the exact loopback listener from the lesson. The host page and target listener use different ports on different machines.
 
 ## Start fresh
 
