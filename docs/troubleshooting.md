@@ -52,7 +52,7 @@ The project-local config needs both host blocks. Run `ssh -G -F state/ssh_config
 
 ## Challenge 09 SOCKS proxy does not reach a page
 
-Keep Terminal A's `ssh -D` command running while using `curl` in Terminal B. If port `11080` is occupied, change that host-side port in the SSH command and both `curl` commands. The page ports inside Alpine stay `8080` and `8081`. Use `--noproxy ''` so a local proxy-bypass setting does not skip the SOCKS proxy. Run `./lab doctor` if the SSH connection itself fails.
+Keep Terminal A's `ssh -D` command running while using `curl` in Terminal B. If port `11080` is occupied, change that host-side port in the SSH command, both `curl` commands, and Firefox. The page ports inside Alpine stay `8080` and `8081`. Use `--noproxy ''` so a local proxy-bypass setting does not skip the SOCKS proxy. If `curl` works but Firefox does not, check its SOCKS v5 host, port, proxy DNS, and **No Proxy For** settings. The `alpine.lccs.test` name is available inside the lab, not in your host's normal DNS. Run `./lab doctor` if the SSH connection itself fails.
 
 ## Start fresh
 

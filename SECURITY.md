@@ -6,6 +6,6 @@ The private keys in `state/keys/` are generated locally with restricted permissi
 
 Challenge 08 places its OpenSSH control socket under `state/mux/` on the host after setting that directory to mode `700`. The socket is for host-terminal sessions; it is not mounted into n8n or either SSH target.
 
-Challenge 09 binds its temporary SOCKS proxy to `127.0.0.1` on the host. The first target's forwarding allowlist limits it to the two private demo pages and the earlier jump destination. It is a training proxy, not a route to the wider network.
+Challenge 09 binds its temporary SOCKS proxy to `127.0.0.1` on the host. The first target's forwarding allowlist limits it to the two private demo pages and the earlier jump destination. The `alpine.lccs.test` alias resolves only inside the first target; the lab does not change host DNS. It is a training proxy, not a route to the wider network.
 
 The lab's passwords are random and unknown, and SSH password authentication is disabled. Do not put real infrastructure keys, customer data, or production hosts into this playground. Review `git status` and the staged file list before publishing this repository.

@@ -4,7 +4,7 @@
 
 ## Goal
 
-Use one local SOCKS proxy to visit two different private web pages inside the Alpine target. In Challenge 06, `-L` mapped one local port to one destination. Here, `-D` lets each client request choose a destination from the lab's allowed list.
+Use one local SOCKS proxy to visit two different private web pages inside the Alpine target, first with `curl` and then in a browser. In Challenge 06, `-L` mapped one local port to one destination. Here, `-D` lets each client request choose a destination from the lab's allowed list.
 
 ## 1. Start the lab and proxy in Terminal A
 
@@ -25,20 +25,31 @@ The blank screen after the final command is expected; keep Terminal A open. The 
 Open another terminal in the playground directory and run:
 
 ```bash
-curl --noproxy '' --socks5-hostname 127.0.0.1:11080 --max-time 5 -fsS http://127.0.0.1:8080/ | grep 'LCCS SSH Playground private service'
-curl --noproxy '' --socks5-hostname 127.0.0.1:11080 --max-time 5 -fsS http://127.0.0.1:8081/ | grep 'LCCS SSH Playground status service'
+curl --noproxy '' --socks5-hostname 127.0.0.1:11080 --max-time 5 -fsS http://alpine.lccs.test:8080/ | grep 'LCCS SSH Playground private service'
+curl --noproxy '' --socks5-hostname 127.0.0.1:11080 --max-time 5 -fsS http://alpine.lccs.test:8081/ | grep 'LCCS SSH Playground status service'
 ```
 
-Expect one line naming each service. Both requests enter the **same** local SOCKS port, but ask for different destination ports. In these URLs, `127.0.0.1` means the Alpine target from the proxy's point of view. `--noproxy ''` keeps a local proxy-bypass setting from skipping this exercise; `--socks5-hostname` sends the destination through the SOCKS proxy.
+Expect one line naming each service. Both requests enter the **same** local SOCKS port, but ask for different destination ports. `alpine.lccs.test` is a lab-only name that resolves to `127.0.0.1` inside Alpine; it does not need a DNS entry on your computer. `--noproxy ''` keeps a local proxy-bypass setting from skipping this exercise, and `--socks5-hostname` sends the lab name through the proxy for resolution on the other end.
 
 The target's SSH server permits forwarding only to these two practice pages and the hidden SSH target from Challenge 07. This proxy is not a general route to other sites or ports.
 
-## 3. Close the proxy
+## 3. Open the same pages in Firefox
+
+Keep the SSH command running in Terminal A. In Firefox, open **Settings**, search for **proxy**, and open **Configure proxy**. Choose **Manual proxy configuration** and enter **SOCKS Host** `127.0.0.1`, **Port** `11080`, and **SOCKS v5**. Ensure **Proxy DNS when using SOCKS v5** is checked, and do not put `alpine.lccs.test` in **No Proxy For**. Save the settings. [Firefox connection settings](https://support.mozilla.org/en-US/kb/connection-settings-firefox) has screenshots if the menu looks different.
+
+Now open the same two destinations you just requested with `curl`:
+
+- [First private page — port 8080](http://alpine.lccs.test:8080/)
+- [Second private page — port 8081](http://alpine.lccs.test:8081/)
+
+The pages should show **Private web service reached** and **Second private service reached**. The links work only while your SOCKS proxy is running and Firefox is using it. If Firefox asks whether to continue to an HTTP page, allow HTTP for these local lab pages. Other sites may stop loading in Firefox while this restricted proxy is selected; restore your previous proxy setting after the exercise.
+
+## 4. Close the proxy
 
 Return to Terminal A and press **Ctrl+C**. In Terminal B, verify the local proxy has stopped:
 
 ```bash
-curl --noproxy '' --socks5-hostname 127.0.0.1:11080 --max-time 2 -fsS http://127.0.0.1:8080/ || echo 'SOCKS proxy is closed.'
+curl --noproxy '' --socks5-hostname 127.0.0.1:11080 --max-time 2 -fsS http://alpine.lccs.test:8080/ || echo 'SOCKS proxy is closed.'
 ```
 
 The page still runs inside Alpine; only your host-side route is gone.

@@ -20,4 +20,4 @@ Subsystem sftp internal-sftp
 # The automation account keeps the global forwarding ban above.
 Match User learner
     AllowTcpForwarding local
-    PermitOpen 127.0.0.1:8080 127.0.0.1:8081 hidden-target:22
+    PermitOpen 127.0.0.1:8080 127.0.0.1:8081 alpine.lccs.test:8080 alpine.lccs.test:8081 hidden-target:22

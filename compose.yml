@@ -20,6 +20,9 @@ services:
     depends_on:
       key-init:
         condition: service_completed_successfully
+    # This lab-only name resolves inside Alpine for the SOCKS browser exercise.
+    extra_hosts:
+      - "alpine.lccs.test:127.0.0.1"
     ports:
       - "127.0.0.1:2222:22"
     volumes:
