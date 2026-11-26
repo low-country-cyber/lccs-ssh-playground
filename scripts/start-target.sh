@@ -18,5 +18,9 @@ printf '%s\n' 'LCCS SSH Playground: First Contact' \
   > /home/learner/README.txt
 chown learner:learner /home/learner/README.txt
 
+# This tiny web page is reachable only from the target's own loopback address.
+# Challenge 06 opens a learner-only SSH tunnel to it; Docker publishes no web port.
+busybox-extras httpd -p 127.0.0.1:8080 -h /srv/lab-http
+
 # Stay in the foreground so Docker can supervise sshd and collect its logs.
 exec /usr/sbin/sshd -D -e -f /etc/ssh/sshd_config

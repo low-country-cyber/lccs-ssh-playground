@@ -1,0 +1,50 @@
+{
+  "name": "SSH Playground - 06 - Private Service",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "96b7a856-4ce5-53a1-9f7c-893e75f9e710",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "wget -qO- http://127.0.0.1:8080/ | grep 'LCCS SSH Playground private service'",
+        "cwd": "/home/automation"
+      },
+      "id": "6f73d825-9439-58be-9457-50e1b76d22f1",
+      "name": "SSH Read Private Service",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "SSH Read Private Service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

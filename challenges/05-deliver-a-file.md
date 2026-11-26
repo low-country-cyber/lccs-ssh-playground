@@ -76,3 +76,5 @@ After the upload in step 3, create the n8n owner account if needed, run `./lab s
 - What does `lpwd` tell you that `pwd` does not?
 
 Keep real secrets and customer files out of this disposable lab. If a transfer fails, run `./lab doctor` and see [troubleshooting](../docs/troubleshooting.md).
+
+Next, try [Challenge 06: Reach a private web service](06-reach-a-private-service.md) to carry a web request through an SSH connection.

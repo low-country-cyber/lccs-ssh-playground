@@ -34,6 +34,10 @@ Run `./lab doctor`, then inspect `docker compose logs --tail=50 ssh-target`. The
 
 Stop and inspect the lab before accepting a new host key. The key in `state/known_hosts` is generated from this lab's server key. A changed key can mean the lab was reset or that you reached a different service on the same port. Do not disable strict host-key checking to make the message disappear.
 
+## Challenge 06 tunnel does not open
+
+Keep the SSH command running in Terminal A while you use `curl` or a browser in Terminal B. If SSH reports that local port `18080` is in use, choose another unused local port in both the `-L` and `curl` commands. Check the target-side page with `ssh -F state/ssh_config playground 'wget -qO- http://127.0.0.1:8080/'`. The target address and port in `-L` must remain `127.0.0.1:8080`.
+
 ## Start fresh
 
 This removes **only this playground's generated state and Compose volume**, including its n8n owner account, workflows, credentials, and all SSH key pairs. Review what you need to keep first. From the playground repository directory:

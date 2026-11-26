@@ -60,6 +60,8 @@ To see the OpenSSH command behind `./lab console`, try [Challenge 02: Connect wi
 
 ### Step 2: connect from n8n
 
+You can complete the command line challenges first and return to all the n8n companions later.
+
 1. Open [http://localhost:5680](http://localhost:5680) and create the owner account for this new lab instance.
 2. Run `./lab setup-n8n` in your terminal, then refresh n8n. This imports the dedicated automation credential and every bundled workflow without displaying the private key or needing an n8n API key.
 3. Open **SSH Playground - First Contact** from the workflow list and execute it manually. Its output should show `automation` and the lab target's hostname.
@@ -89,6 +91,7 @@ Running `docker compose up -d` again preserves all three SSH key pairs. To start
 - [Who trusts whom? challenge](challenges/03-who-trusts-whom.md)
 - [Name your connection challenge](challenges/04-name-your-connection.md)
 - [Deliver a file challenge](challenges/05-deliver-a-file.md)
+- [Reach a private web service challenge](challenges/06-reach-a-private-service.md)
 - [Installation guide](docs/install.md)
 - [Mac walkthrough](docs/mac.md)
 - [Troubleshooting and reset](docs/troubleshooting.md)
