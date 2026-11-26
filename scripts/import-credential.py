@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Import the lab SSH credential into the bundled n8n after owner setup."""
+"""Import the Low Country Cyber Solutions SSH Playground credential into n8n.
+
+Run this on the host after creating the lab's n8n owner account. The generated
+automation private key is passed to the local n8n CLI without printing it.
+"""
 
 import json
 import subprocess
@@ -13,11 +17,13 @@ PROJECT_DIR = Path(__file__).resolve().parent.parent
 
 
 def main() -> int:
+    # This is the automation identity, not the learner's terminal SSH key.
     key_path = PROJECT_DIR / "state" / "keys" / "automation"
     if not key_path.is_file():
         print("Lab key is missing. Run docker compose up -d first.", file=sys.stderr)
         return 1
 
+    # n8n needs its owner account before a personal credential can be imported.
     try:
         with urllib.request.urlopen("http://127.0.0.1:5680/rest/settings", timeout=5) as response:
             settings = json.load(response)["data"]
@@ -29,6 +35,7 @@ def main() -> int:
         print("Create the owner account at http://localhost:5680 first.", file=sys.stderr)
         return 1
 
+    # Inside Compose, n8n reaches the target by service name on port 22.
     credential = {
         "id": "lccs-ssh-playground-automation-v1",
         "name": "SSH Playground Automation",
@@ -42,6 +49,8 @@ def main() -> int:
         },
     }
 
+    # Pass the credential through stdin, avoiding a key in command arguments or
+    # a temporary JSON file. Capture CLI output without exposing the key.
     result = subprocess.run(
         ["docker", "compose", "exec", "-T", "-u", "node", "n8n", "n8n", "import:credentials", "--input=/dev/stdin"],
         cwd=PROJECT_DIR,
