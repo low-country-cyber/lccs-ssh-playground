@@ -68,11 +68,17 @@ These should show the **same** SHA256 fingerprint. The first file is the server'
 
 ## 6. Connect this to n8n
 
+To try the automation identity in n8n:
+
+1. Open `http://localhost:5680` and create the owner account if this is a fresh lab.
+2. From the playground directory, run `./lab import-credential`, then refresh n8n.
+3. Import [`workflows/01-first-contact.json`](../workflows/01-first-contact.json), choose **SSH Playground Automation** in its SSH node, and run it manually. The output should begin with `automation`.
+
 ```bash
 ./lab credential-info
 ```
 
-This prints the connection fields and the **path** to n8n's automation key, without printing the private key. After `./lab import-credential`, n8n holds its own credential for `automation@ssh-target:22`; your terminal uses `learner@127.0.0.1:2222`. The different hostnames and ports are the Docker-internal and host-facing routes to the same SSH target.
+This prints the connection fields and the **path** to n8n's automation key, without printing the private key. n8n uses `automation@ssh-target:22`; your terminal uses `learner@127.0.0.1:2222`. The different hostnames and ports are the Docker-internal and host-facing routes to the same SSH target.
 
 ## Explain what happened
 
