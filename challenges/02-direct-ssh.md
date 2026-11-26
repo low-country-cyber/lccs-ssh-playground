@@ -54,3 +54,5 @@ The first line of output should be `learner`; the second is the lab container's 
 - Why does n8n use `ssh-target:22` while your host terminal uses `127.0.0.1:2222`?
 
 If the connection fails, use the [troubleshooting guide](../docs/troubleshooting.md). Keep the private key in `state/keys/console` local; never paste it into an issue or screenshot.
+
+Next, try [Challenge 03: Who trusts whom?](03-who-trusts-whom.md) to see why your key works for `learner` and how your terminal recognizes the server.
