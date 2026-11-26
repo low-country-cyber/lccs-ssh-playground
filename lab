@@ -12,10 +12,11 @@ Commands:
   console              Open an SSH shell as the learner account
   automation [COMMAND] Run a command as the automation account
   doctor               Check both SSH identities and n8n health
-  credential-info      Show the fields for an n8n SSH credential
-  import-credential    Import the automation credential after n8n owner setup
-  setup-n8n            Import the credential and all bundled workflows
+  credential-info      Show the fields for both n8n SSH credentials
+  import-credential    Import both automation credentials after owner setup
+  setup-n8n            Import credentials and all bundled workflows
   ssh-config           Print a project-local SSH config for Challenge 04
+  jump-config          Print the hidden-target stanza for Challenge 07
   status               Show Compose service status
 EOF
 }
@@ -40,7 +41,7 @@ case "${1:-}" in
   doctor)
     command -v ssh >/dev/null || { echo 'OpenSSH client is required.' >&2; exit 1; }
     command -v curl >/dev/null || { echo 'curl is required for the health check.' >&2; exit 1; }
-    if [[ ! -s state/keys/console || ! -s state/keys/automation || ! -s state/known_hosts ]]; then
+    if [[ ! -s state/keys/console || ! -s state/keys/automation || ! -s state/keys/hidden-automation || ! -s state/known_hosts || ! -s state/hidden_known_hosts ]]; then
       echo 'Generated SSH state is missing. Run docker compose up -d.' >&2
       exit 1
     fi
@@ -58,16 +59,26 @@ case "${1:-}" in
       echo 'n8n did not become healthy. Run docker compose logs n8n.' >&2
       exit 1
     fi
-    echo 'Both SSH identities and n8n health passed.'
+    echo 'SSH identities and n8n health passed.'
     ;;
   credential-info)
     cat <<EOF
-n8n URL:     http://localhost:5680
+n8n URL: http://localhost:5680
+
+SSH Playground Automation (first target)
 Type:        SSH Private Key
 Host:        ssh-target
 Port:        22
 Username:    automation
 Private key: $project_dir/state/keys/automation (read locally; do not publish)
+Passphrase:  blank
+
+SSH Playground Hidden Automation (hidden target)
+Type:        SSH Private Key
+Host:        hidden-target
+Port:        22
+Username:    automation
+Private key: $project_dir/state/keys/hidden-automation (read locally; do not publish)
 Passphrase:  blank
 EOF
     ;;
@@ -88,6 +99,22 @@ Host playground
     IdentitiesOnly yes
     StrictHostKeyChecking yes
     UserKnownHostsFile "$project_dir/state/known_hosts"
+    ForwardAgent no
+EOF
+    ;;
+  jump-config)
+    cat <<EOF
+# Low Country Cyber Solutions SSH Playground: reach the hidden target through playground.
+Host hidden-lab
+    HostName hidden-target
+    User learner
+    Port 22
+    IdentityFile "$project_dir/state/keys/console"
+    IdentitiesOnly yes
+    StrictHostKeyChecking yes
+    UserKnownHostsFile "$project_dir/state/hidden_known_hosts"
+    HostKeyAlias hidden-lab
+    ProxyJump playground
     ForwardAgent no
 EOF
     ;;

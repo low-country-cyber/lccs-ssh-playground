@@ -13,14 +13,16 @@ for lab_user in learner automation; do
 done
 
 # Give first-time learners a harmless file to read after logging in.
-printf '%s\n' 'LCCS SSH Playground: First Contact' \
+printf '%s\n' "LCCS SSH Playground: ${LAB_TARGET_LABEL:-First Contact}" \
   'This is a disposable lab target. No real infrastructure is connected.' \
   > /home/learner/README.txt
 chown learner:learner /home/learner/README.txt
 
-# This tiny web page is reachable only from the target's own loopback address.
-# Challenge 06 opens a learner-only SSH tunnel to it; Docker publishes no web port.
-busybox-extras httpd -p 127.0.0.1:8080 -h /srv/lab-http
+# Only the first target runs the Challenge 06 page. The hidden target is a
+# separate SSH endpoint for Challenge 07, with no web listener to confuse it.
+if [ "${LAB_WEB_SERVICE:-yes}" = yes ]; then
+  busybox-extras httpd -p 127.0.0.1:8080 -h /srv/lab-http
+fi
 
 # Stay in the foreground so Docker can supervise sshd and collect its logs.
-exec /usr/sbin/sshd -D -e -f /etc/ssh/sshd_config
+exec /usr/sbin/sshd -D -e -f "${LAB_SSHD_CONFIG:-/etc/ssh/sshd_config}"

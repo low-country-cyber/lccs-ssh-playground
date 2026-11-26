@@ -26,7 +26,7 @@ curl --version
 python3 --version
 ```
 
-Git, SSH, and curl are needed for the steps below. If Git is missing, the [Git macOS guide](https://git-scm.com/install/mac) includes the Xcode Command Line Tools option (`xcode-select --install`). Python 3 is needed only for the convenient `./lab import-credential` command. If it is missing, use the [official Python macOS installer](https://www.python.org/downloads/macos/), or create the n8n SSH credential manually later.
+Git, SSH, and curl are needed for the steps below. If Git is missing, the [Git macOS guide](https://git-scm.com/install/mac) includes the Xcode Command Line Tools option (`xcode-select --install`). Python 3 is needed for `./lab setup-n8n` and `./lab import-credential`. If it is missing, use the [official Python macOS installer](https://www.python.org/downloads/macos/), or create the n8n SSH credentials manually later.
 
 ## 3. Download and start the lab
 
@@ -67,7 +67,7 @@ This SSH session goes to the disposable container, not your Mac's SSH server.
 2. Back in Terminal, from the repository directory, run `./lab setup-n8n`. Refresh the n8n page afterward.
 3. Open **SSH Playground - First Contact** from the workflow list and execute it manually. It should return `automation` and the lab container hostname.
 
-If you skipped Python 3, run `./lab credential-info` for the fields to enter in a new n8n **SSH Private Key** credential, then import the desired JSON files from `workflows/` in the n8n editor. Read the key from the local file it names and paste the entire key into n8n. Keep the private key off GitHub and out of screenshots.
+If you skipped Python 3, run `./lab credential-info` for the fields to enter in n8n **SSH Private Key** credentials, then import the desired JSON files from `workflows/` in the n8n editor. Open each imported SSH node and select the matching credential; the hidden target uses the second one listed by the helper. Read each key from its local file and paste it into the matching n8n credential. Keep private keys off GitHub and out of screenshots.
 
 ## Stop and return later
 
@@ -75,4 +75,4 @@ If you skipped Python 3, run `./lab credential-info` for the fields to enter in 
 docker compose down
 ```
 
-Your n8n account, workflow, credential, and generated SSH keys remain for the next `docker compose up -d`. See [troubleshooting](troubleshooting.md) for permission, port, and reset issues.
+Your n8n account, workflows, credentials, and generated SSH keys remain for the next `docker compose up -d`. See [troubleshooting](troubleshooting.md) for permission, port, and reset issues.

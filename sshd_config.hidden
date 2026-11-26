@@ -1,0 +1,17 @@
+# Low Country Cyber Solutions SSH Playground: hidden target for Challenge 07.
+Port 22
+ListenAddress 0.0.0.0
+HostKey /lab-server/ssh_host_ed25519_key
+PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+AuthenticationMethods publickey
+AllowUsers learner automation
+AllowAgentForwarding no
+AllowTcpForwarding no
+X11Forwarding no
+PermitTunnel no
+PermitUserEnvironment no
+LogLevel VERBOSE
+Subsystem sftp internal-sftp

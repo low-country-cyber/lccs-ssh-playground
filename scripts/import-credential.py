@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Import the Low Country Cyber Solutions SSH Playground credential into n8n.
+"""Import the Low Country Cyber Solutions SSH Playground credentials into n8n.
 
 Run this on the host after creating the lab's n8n owner account. The generated
-automation private key is passed to the local n8n CLI without printing it.
+automation private keys are passed to the local n8n CLI without printing them.
 """
 
 import json
@@ -14,38 +14,50 @@ from pathlib import Path
 
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
+CREDENTIAL_SPECS = (
+    (
+        "ssh-target",
+        "automation",
+        "lccs-ssh-playground-automation-v1",
+        "SSH Playground Automation",
+    ),
+    (
+        "hidden-target",
+        "hidden-automation",
+        "lccs-ssh-playground-hidden-automation-v1",
+        "SSH Playground Hidden Automation",
+    ),
+)
 
 
 def main() -> int:
-    # This is the automation identity, not the learner's terminal SSH key.
-    key_path = PROJECT_DIR / "state" / "keys" / "automation"
-    public_key_path = PROJECT_DIR / "state" / "keys" / "automation.pub"
-    if not key_path.is_file():
-        print("Lab key is missing. Run docker compose up -d first.", file=sys.stderr)
-        return 1
-    if not public_key_path.is_file():
-        print("Lab public key is missing. Run docker compose up -d first.", file=sys.stderr)
-        return 1
-
-    # A second clone can replace this Compose project's SSH target. Check its
-    # public key before importing a private key that the target would reject.
-    target_key = subprocess.run(
-        ["docker", "compose", "exec", "-T", "ssh-target", "cat", "/home/automation/.ssh/authorized_keys"],
-        cwd=PROJECT_DIR,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    if target_key.returncode != 0:
-        print("Cannot read the running SSH target. Run docker compose up -d first.", file=sys.stderr)
-        return 1
-    if target_key.stdout.strip() != public_key_path.read_text().strip():
-        print(
-            "The running SSH target uses a different automation key. Another playground clone may be active. "
-            "Use one clone for this lab.",
-            file=sys.stderr,
+    # The learner's console key never enters n8n. Check both automation public
+    # keys against the running targets before importing their private halves.
+    key_paths = []
+    for service, key_name, _, _ in CREDENTIAL_SPECS:
+        key_path = PROJECT_DIR / "state" / "keys" / key_name
+        public_key_path = PROJECT_DIR / "state" / "keys" / f"{key_name}.pub"
+        if not key_path.is_file() or not public_key_path.is_file():
+            print("Lab key is missing. Run docker compose up -d first.", file=sys.stderr)
+            return 1
+        target_key = subprocess.run(
+            ["docker", "compose", "exec", "-T", service, "cat", "/home/automation/.ssh/authorized_keys"],
+            cwd=PROJECT_DIR,
+            text=True,
+            capture_output=True,
+            check=False,
         )
-        return 1
+        if target_key.returncode != 0:
+            print(f"Cannot read the running {service}. Run docker compose up -d first.", file=sys.stderr)
+            return 1
+        if target_key.stdout.strip() != public_key_path.read_text().strip():
+            print(
+                f"The running {service} uses a different automation key. Another playground clone may be active. "
+                "Use one clone for this lab.",
+                file=sys.stderr,
+            )
+            return 1
+        key_paths.append(key_path)
 
     # n8n needs its owner account before a personal credential can be imported.
     try:
@@ -59,35 +71,37 @@ def main() -> int:
         print("Create the owner account at http://localhost:5680 first.", file=sys.stderr)
         return 1
 
-    # Inside Compose, n8n reaches the target by service name on port 22.
-    credential = {
-        "id": "lccs-ssh-playground-automation-v1",
-        "name": "SSH Playground Automation",
-        "type": "sshPrivateKey",
-        "data": {
-            "host": "ssh-target",
-            "port": 22,
-            "username": "automation",
-            "privateKey": key_path.read_text(),
-            "passphrase": "",
-        },
-    }
+    # Inside Compose, n8n reaches each target directly by its service name.
+    credentials = []
+    for (service, _, credential_id, name), key_path in zip(CREDENTIAL_SPECS, key_paths):
+        credentials.append({
+            "id": credential_id,
+            "name": name,
+            "type": "sshPrivateKey",
+            "data": {
+                "host": service,
+                "port": 22,
+                "username": "automation",
+                "privateKey": key_path.read_text(),
+                "passphrase": "",
+            },
+        })
 
-    # Pass the credential through stdin, avoiding a key in command arguments or
-    # a temporary JSON file. Capture CLI output without exposing the key.
+    # Pass both credentials through stdin, avoiding keys in command arguments
+    # or a temporary JSON file. Capture CLI output without exposing the keys.
     result = subprocess.run(
         ["docker", "compose", "exec", "-T", "-u", "node", "n8n", "n8n", "import:credentials", "--input=/dev/stdin"],
         cwd=PROJECT_DIR,
-        input=json.dumps([credential]),
+        input=json.dumps(credentials),
         text=True,
         capture_output=True,
         check=False,
     )
-    if result.returncode != 0 or "Successfully imported 1 credential." not in result.stdout:
+    if result.returncode != 0 or "Successfully imported 2 credentials." not in result.stdout:
         print("Credential import failed. Check n8n owner setup and Compose logs.", file=sys.stderr)
         return 1
 
-    print("Imported SSH Playground Automation into the owner’s personal credentials. Refresh n8n to see it.")
+    print("Imported both SSH Playground automation credentials. Refresh n8n to see them.")
     return 0
 
 

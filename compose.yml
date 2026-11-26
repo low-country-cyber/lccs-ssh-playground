@@ -31,10 +31,32 @@ services:
       retries: 12
     restart: unless-stopped
 
+  hidden-target:
+    <<: *ssh-image
+    hostname: hidden-lab
+    command: /usr/local/bin/start-target.sh
+    depends_on:
+      key-init:
+        condition: service_completed_successfully
+    environment:
+      LAB_TARGET_LABEL: Hidden Target
+      LAB_WEB_SERVICE: "no"
+      LAB_SSHD_CONFIG: /etc/ssh/sshd_config.hidden
+    volumes:
+      - ./state/hidden-server:/lab-server:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pidof sshd >/dev/null"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
   n8n:
     image: docker.n8n.io/n8nio/n8n:stable
     depends_on:
       ssh-target:
+        condition: service_healthy
+      hidden-target:
         condition: service_healthy
     ports:
       - "127.0.0.1:5680:5678"

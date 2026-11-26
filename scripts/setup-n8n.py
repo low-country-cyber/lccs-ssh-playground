@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Load the bundled SSH Playground credential and inactive n8n workflows."""
+"""Load the bundled SSH Playground credentials and inactive n8n workflows."""
 
 import json
 import re
@@ -13,6 +13,12 @@ PROJECT_DIR = Path(__file__).resolve().parent.parent
 WORKFLOWS_DIR = PROJECT_DIR / "workflows"
 CREDENTIAL_ID = "lccs-ssh-playground-automation-v1"
 CREDENTIAL_NAME = "SSH Playground Automation"
+HIDDEN_CREDENTIAL_ID = "lccs-ssh-playground-hidden-automation-v1"
+HIDDEN_CREDENTIAL_NAME = "SSH Playground Hidden Automation"
+CREDENTIAL_REFS = {
+    "main": {"id": CREDENTIAL_ID, "name": CREDENTIAL_NAME},
+    "hidden": {"id": HIDDEN_CREDENTIAL_ID, "name": HIDDEN_CREDENTIAL_NAME},
+}
 
 
 def n8n_cli(*args: str, input_text: Optional[str] = None):
@@ -62,8 +68,14 @@ def prepared_workflow(path: Path) -> dict:
         if node.get("type") == "n8n-nodes-base.ssh":
             if "credentials" in node:
                 raise ValueError(f"Do not embed a credential in {path.name}")
+            # This public marker selects a lab target without putting a
+            # credential ID into the checked-in workflow JSON. Remove it from
+            # the copy sent to n8n so the editor sees only standard node data.
+            credential_key = node.pop("labCredential", "main")
+            if credential_key not in CREDENTIAL_REFS:
+                raise ValueError(f"Unknown labCredential in {path.name}")
             node["credentials"] = {
-                "sshPrivateKey": {"id": CREDENTIAL_ID, "name": CREDENTIAL_NAME}
+                "sshPrivateKey": CREDENTIAL_REFS[credential_key]
             }
     return workflow
 

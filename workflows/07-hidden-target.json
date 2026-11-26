@@ -1,0 +1,51 @@
+{
+  "name": "SSH Playground - 07 - Hidden Target",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a0d2b72b-ecd5-5521-b9a5-5295f1905449",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "whoami && hostname && cat /home/learner/README.txt",
+        "cwd": "/home/automation"
+      },
+      "id": "6babe1fa-7a05-53ac-b61c-9b54b6afd826",
+      "name": "SSH Hidden Target",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "labCredential": "hidden",
+      "position": [
+        480,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "SSH Hidden Target",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

@@ -9,6 +9,7 @@ RUN apk add --no-cache openssh-server openssh-client busybox-extras \
        done
 
 COPY sshd_config /etc/ssh/sshd_config
+COPY sshd_config.hidden /etc/ssh/sshd_config.hidden
 COPY services/private-web/ /srv/lab-http/
 COPY scripts/bootstrap-keys.sh scripts/start-target.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/bootstrap-keys.sh /usr/local/bin/start-target.sh

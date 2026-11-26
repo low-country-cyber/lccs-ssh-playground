@@ -7,8 +7,9 @@
 | What starts | Where you reach it |
 | --- | --- |
 | SSH lab target | Your terminal connects to `127.0.0.1:2222` |
+| Hidden SSH target | Reach it through the first target with `ProxyJump`; no host port is published |
 | Private n8n learning instance | Open `http://localhost:5680` |
-| Key generator | Creates separate console, automation, and server keys in ignored local `state/` |
+| Key generator | Creates a console key, two automation keys, and two server keys in ignored local `state/` |
 
 The SSH and n8n ports bind to your machine's loopback interface. Generated private keys stay on your machine and are excluded from Git and the Docker build context.
 
@@ -63,12 +64,12 @@ To see the OpenSSH command behind `./lab console`, try [Challenge 02: Connect wi
 You can complete the command line challenges first and return to all the n8n companions later.
 
 1. Open [http://localhost:5680](http://localhost:5680) and create the owner account for this new lab instance.
-2. Run `./lab setup-n8n` in your terminal, then refresh n8n. This imports the dedicated automation credential and every bundled workflow without displaying the private key or needing an n8n API key.
+2. Run `./lab setup-n8n` in your terminal, then refresh n8n. This imports both automation credentials and every bundled workflow without displaying private keys or needing an n8n API key.
 3. Open **SSH Playground - First Contact** from the workflow list and execute it manually. Its output should show `automation` and the lab target's hostname.
 
-All bundled workflows stay inactive until you choose to run them. The public [workflow files](workflows/) contain no private key or credential ID; `./lab setup-n8n` binds the lab credential during import. You can rerun setup after adding lessons: it skips existing workflows so your edits remain, and refreshes the lab credential from the current local key. The n8n container reaches the SSH target at `ssh-target:22` on the Compose network; your terminal reaches it at `127.0.0.1:2222` through the host port mapping.
+All bundled workflows stay inactive until you choose to run them. The public [workflow files](workflows/) contain no private key or credential ID; `./lab setup-n8n` binds each lab credential during import. You can rerun setup after adding lessons: it skips existing workflows so your edits remain, and refreshes the lab credentials from the current local keys. The n8n container reaches both SSH targets on the Compose network; your terminal uses `127.0.0.1:2222` for the first target and jumps through it to the hidden target.
 
-Prefer to create the credential in the n8n UI yourself? Run `./lab credential-info` to see the exact fields and the local path to the automation private key. Keep that key out of chat, screenshots, and Git.
+Prefer to create the credentials in the n8n UI yourself? Run `./lab credential-info` to see the exact fields and local paths to the automation private keys. Keep those keys out of chat, screenshots, and Git.
 
 ## Helpful commands
 
@@ -77,12 +78,13 @@ Prefer to create the credential in the n8n UI yourself? Run `./lab credential-in
 | `./lab status` | Shows the lab containers |
 | `./lab doctor` | Checks both SSH logins and n8n health |
 | `./lab automation 'whoami && hostname'` | Runs a command with the automation identity |
-| `./lab credential-info` | Shows n8n SSH credential fields without printing a secret |
-| `./lab setup-n8n` | Imports the SSH credential and all bundled workflows after owner setup |
+| `./lab credential-info` | Shows both n8n SSH credential fields without printing secrets |
+| `./lab setup-n8n` | Imports both SSH credentials and all bundled workflows after owner setup |
+| `./lab jump-config` | Adds the hidden target to a project-local SSH config |
 | `docker compose logs --tail=50 ssh-target` | Shows recent SSH server logs |
 | `docker compose down` | Stops the lab while keeping keys and n8n data |
 
-Running `docker compose up -d` again preserves all three SSH key pairs. To start completely fresh, follow the [reset instructions](docs/troubleshooting.md#start-fresh); a reset removes lab accounts, workflows, credentials, and keys.
+Running `docker compose up -d` again preserves all generated SSH key pairs. To start completely fresh, follow the [reset instructions](docs/troubleshooting.md#start-fresh); a reset removes lab accounts, workflows, credentials, and keys.
 
 ## More help
 
@@ -92,6 +94,7 @@ Running `docker compose up -d` again preserves all three SSH key pairs. To start
 - [Name your connection challenge](challenges/04-name-your-connection.md)
 - [Deliver a file challenge](challenges/05-deliver-a-file.md)
 - [Reach a private web service challenge](challenges/06-reach-a-private-service.md)
+- [Reach a hidden SSH target challenge](challenges/07-jump-to-a-hidden-target.md)
 - [Installation guide](docs/install.md)
 - [Mac walkthrough](docs/mac.md)
 - [Troubleshooting and reset](docs/troubleshooting.md)

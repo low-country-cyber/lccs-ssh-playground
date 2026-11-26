@@ -15,8 +15,9 @@ PermitUserEnvironment no
 LogLevel VERBOSE
 Subsystem sftp internal-sftp
 
-# Challenge 06: the learner may reach only the target's private demo page.
+# Challenges 06 and 07: the learner may reach the private demo page and use
+# this server as a jump host to the hidden target, but no other destinations.
 # The automation account keeps the global forwarding ban above.
 Match User learner
     AllowTcpForwarding local
-    PermitOpen 127.0.0.1:8080
+    PermitOpen 127.0.0.1:8080 hidden-target:22

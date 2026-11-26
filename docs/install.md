@@ -12,7 +12,7 @@ The end-to-end lab has been tested on Linux. The Windows WSL and macOS sections 
 | Git | Cloning the repository | A GitHub ZIP download also works, but Git makes updates easier |
 | OpenSSH client | `./lab console` and `./lab doctor` | The lab server runs inside Docker |
 | curl | `./lab doctor` health check | Usually present on macOS; install on Linux if absent |
-| Python 3 | `./lab setup-n8n` and `./lab import-credential` | You can create the credential and import workflow JSON files manually without Python |
+| Python 3 | `./lab setup-n8n` and `./lab import-credential` | You can create the credentials and import workflow JSON files manually without Python |
 
 ### Windows: Docker Desktop + Ubuntu WSL
 

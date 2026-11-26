@@ -69,3 +69,5 @@ You can test n8n after finishing the command line lessons. After creating the ow
 - Why can the n8n workflow reach the page without using your local forward?
 
 If port `18080` is already in use, choose another unused local port in both the `-L` and `curl` commands. The target-side `127.0.0.1:8080` stays the same. If the tunnel fails, run `./lab doctor` and check the [troubleshooting guide](../docs/troubleshooting.md).
+
+Next, try [Challenge 07: Reach a hidden SSH target](07-jump-to-a-hidden-target.md) to use the first server as a route to a second one.
