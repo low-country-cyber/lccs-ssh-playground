@@ -27,3 +27,5 @@ The expected first output line is `automation`. The second line is the lab targe
 - Why does the terminal connect to `127.0.0.1` on port `2222`, while n8n connects to `ssh-target` on port `22`?
 - Which machine holds each private key? Which machine accepts the matching public key?
 - What should happen if the SSH target presents an unexpected host key?
+
+Next, try [Challenge 02: Connect with OpenSSH](02-direct-ssh.md) to make the same terminal connection without the helper.

@@ -55,6 +55,8 @@ cat README.txt
 
 Type `exit` when finished. The terminal helper uses a generated, pinned host key. It will refuse an unexpected SSH server identity.
 
+To see the OpenSSH command behind `./lab console`, try [Challenge 02: Connect with OpenSSH](challenges/02-direct-ssh.md).
+
 ### Step 2: connect from n8n
 
 1. Open [http://localhost:5680](http://localhost:5680) and create the owner account for this new lab instance.
@@ -82,6 +84,7 @@ Running `docker compose up -d` again preserves all three SSH key pairs. To start
 ## More help
 
 - [First Contact challenge](challenges/01-first-contact.md)
+- [Connect with OpenSSH challenge](challenges/02-direct-ssh.md)
 - [Installation guide](docs/install.md)
 - [Mac walkthrough](docs/mac.md)
 - [Troubleshooting and reset](docs/troubleshooting.md)
