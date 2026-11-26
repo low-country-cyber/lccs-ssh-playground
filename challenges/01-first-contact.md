@@ -1,5 +1,7 @@
 # Challenge 01: First Contact
 
+![A learner and an n8n automation connect to the same protected SSH lab server](../assets/ssh-playground-hero.png)
+
 ## Goal
 
 Reach the same disposable SSH target from two places: your terminal and an n8n workflow. The terminal uses the `learner` identity. n8n uses the `automation` identity.

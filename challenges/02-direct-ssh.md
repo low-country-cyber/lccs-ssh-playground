@@ -1,5 +1,7 @@
 # Challenge 02: Connect with OpenSSH
 
+![A learner connects directly from a terminal through an SSH key and port to the Alpine lab server](../assets/challenge-02-direct-ssh.png)
+
 ## Goal
 
 Reach the Alpine SSH target from your host terminal using `ssh` directly. Challenge 01 used `./lab console`; here you supply the username, host, port, key, and host-key check yourself.
