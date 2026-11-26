@@ -26,7 +26,7 @@ curl --version
 python3 --version
 ```
 
-Git, SSH, and curl are needed for the steps below. If Git is missing, the [Git macOS guide](https://git-scm.com/install/mac) includes the Xcode Command Line Tools option (`xcode-select --install`). Python 3 is needed for `./lab setup-n8n` and `./lab import-credential`. If it is missing, use the [official Python macOS installer](https://www.python.org/downloads/macos/), or create the n8n SSH credentials manually later.
+Git, SSH, and curl are needed for the steps below. If Git is missing, the [Git macOS guide](https://git-scm.com/install/mac) includes the Xcode Command Line Tools option (`xcode-select --install`). Python 3 is needed for `./lab setup-n8n`, `./lab import-credential`, and Challenge 10's host page. If it is missing, use the [official Python macOS installer](https://www.python.org/downloads/macos/). You can create the n8n SSH credentials manually without Python, but Challenge 10 uses Python's built-in web server.
 
 ## 3. Download and start the lab
 

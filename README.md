@@ -97,6 +97,7 @@ Running `docker compose up -d` again preserves all generated SSH key pairs. To s
 - [Reach a hidden SSH target challenge](challenges/07-jump-to-a-hidden-target.md)
 - [Reuse one SSH connection challenge](challenges/08-reuse-one-connection.md)
 - [Reach two services with one SOCKS proxy challenge](challenges/09-one-proxy-two-services.md)
+- [Share a host page with Alpine challenge](challenges/10-share-a-host-page.md)
 - [Installation guide](docs/install.md)
 - [Mac walkthrough](docs/mac.md)
 - [Troubleshooting and reset](docs/troubleshooting.md)

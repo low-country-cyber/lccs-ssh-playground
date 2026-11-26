@@ -9,6 +9,7 @@ AuthenticationMethods publickey
 AllowUsers learner automation
 AllowAgentForwarding no
 AllowTcpForwarding no
+GatewayPorts no
 X11Forwarding no
 PermitTunnel no
 PermitUserEnvironment no
@@ -16,8 +17,10 @@ LogLevel VERBOSE
 Subsystem sftp internal-sftp
 
 # Challenges 06, 07, and 09: the learner may reach either private demo page
-# and use this server as a jump host, but no other forwarding destinations.
-# The automation account keeps the global forwarding ban above.
+# and use this server as a jump host. Challenge 10 allows one reverse listener
+# on the target's loopback interface. The automation account keeps the global
+# forwarding ban above.
 Match User learner
-    AllowTcpForwarding local
+    AllowTcpForwarding yes
     PermitOpen 127.0.0.1:8080 127.0.0.1:8081 alpine.lccs.test:8080 alpine.lccs.test:8081 hidden-target:22
+    PermitListen localhost:18090 127.0.0.1:18090

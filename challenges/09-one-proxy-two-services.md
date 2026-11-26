@@ -67,3 +67,5 @@ n8n connects to the Alpine target with the saved **SSH Playground Automation** c
 - Why can the n8n workflow read both pages after you close the host proxy?
 
 If port `11080` is busy, choose another free local port in the SSH and `curl` commands. If a request fails, run `./lab doctor` and see the [troubleshooting guide](../docs/troubleshooting.md). Keep generated keys in `state/` out of screenshots and Git.
+
+Next: [Challenge 10: Share a host page with Alpine](10-share-a-host-page.md).

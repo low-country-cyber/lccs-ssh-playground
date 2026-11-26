@@ -1,0 +1,36 @@
+{
+  "name": "SSH Playground - 10 - Reverse Tunnel",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "78d6c513-d23a-5e76-871b-eb1213e00b58",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "wget -qO- http://127.0.0.1:18090/ | grep 'LCCS SSH Playground host page'",
+        "cwd": "/home/automation"
+      },
+      "id": "eda550ef-827c-56e4-85ce-6d7cd90d8964",
+      "name": "SSH Read Host Page",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [480, 300]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [[{"node": "SSH Read Host Page", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

@@ -54,6 +54,10 @@ The project-local config needs both host blocks. Run `ssh -G -F state/ssh_config
 
 Keep Terminal A's `ssh -D` command running while using `curl` in Terminal B. If port `11080` is occupied, change that host-side port in the SSH command, both `curl` commands, and Firefox. The page ports inside Alpine stay `8080` and `8081`. Use `--noproxy ''` so a local proxy-bypass setting does not skip the SOCKS proxy. If `curl` works but Firefox does not, check its SOCKS v5 host, port, proxy DNS, and **No Proxy For** settings. The `alpine.lccs.test` name is available inside the lab, not in your host's normal DNS. Run `./lab doctor` if the SSH connection itself fails.
 
+## Challenge 10 reverse tunnel does not reach the host page
+
+Keep the Python web server in Terminal A and the `ssh -R` command in Terminal B running while you test from Terminal C or n8n. Check the host page first at `http://127.0.0.1:19090/`, then try `ssh -F state/ssh_config playground 'wget -qO- http://127.0.0.1:18090/'`. If host port `19090` is busy, use another free host port in the Python command, the last port in `-R`, and the host-side `curl` or browser URL. If the SSH command reports that remote forwarding failed, confirm that `18090` is unused inside Alpine and that you requested the exact loopback listener from the lesson. The host page and target listener use different ports on different machines.
+
 ## Start fresh
 
 This removes **this playground's generated SSH keys and Compose volume**, including its n8n owner account, workflows, credentials, and all SSH key pairs. Practice files such as `state/parcel.txt` remain. Review what you need to keep first. From the playground repository directory:
